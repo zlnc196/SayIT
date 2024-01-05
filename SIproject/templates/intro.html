@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load static%}
+
+
+{% block content %}
+
+<div class='intropage' >
+
+<h1> Entertainment or information, SayIT has it all </h1>
+
+
+
+<img src='{% static 'images/logo.png' %}'>
+
+<div class='buttongroup'>
+
+<form action='register'>
+    <button type='submit' class='homebuttons'> Register </button>
+
+</form>
+
+<form action='login'>
+    <button type='submit' class='homebuttons'> Login </button>
+    
+
+</form>
+
+</div>
+
+</div>
+
+
+{% endblock %}

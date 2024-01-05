@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<form method='post' action='profile'>
+    {%csrf_token%}
+    <textarea id='poster' rows="10" cols="30" name='post' placeholder='Whats on your mind?'></textarea>
+    
+    <button type='submit' id='spost'> Post </button>
+
+
+<form>
+
+<div class='buttongroup'>
+    <form method='post' action='profile'>
+        {% csrf_token %}
+        <button type='submit' class = 'topbuttons'> Your profile </button>
+    </form>
+
+
+    <form method='post' action='AllPosts'>
+        {% csrf_token %}
+        <button type='submit' class = 'topbuttons'> Most popular posts  </button>
+    </form>
+
+
+
+    <form method='post' action='profile'>
+        {% csrf_token %}
+        <button type='submit' class = 'topbuttons'> Posts from followed accounts </button>
+    </form>
+
+    <form method='post'>
+        {% csrf_token %}
+        <input for='text' placeholder='search' class='searcher'>
+    </form>
+</div>
+
+    
+
+
+{% endblock %}

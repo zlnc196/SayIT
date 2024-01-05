@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<div class ='registration'>
+    {% if Valid == True %}
+        <p class='success'> Registration successful, account created </p>
+    {% endif %}
+
+    {% if lValid == False %}
+        <p class='success'> Incorrect login details </p>
+    {% endif %}
+
+
+    <form method='post' action='homepage'>
+
+        {% csrf_token %}
+
+    
+        <label for='lusername' > Username </label> <br> 
+        <input type='text' name='lusername' class='rtextbox'> <br>
+        <label for='lpassword' > Password </label> <br>
+        <input type='password' name='lpassword' class='rtextbox'> <br> <br>
+        
+        <button type='submit' class='subbutton'> Login </button>
+    
+    </form>
+    
+</div>
+
+
+
+
+{% endblock %}
