@@ -186,6 +186,7 @@ def profile(request):
     cusers = Users.objects.filter(username=currentUser).first()
     
     likedList = cusers.liked_posts
+    likedList = "-".join(likedList)
   
     
     
@@ -222,6 +223,8 @@ def AllPosts(request):
     cusers = Users.objects.filter(username=currentUser).first()
     
     likedList = cusers.liked_posts
+    likedList = "-".join(likedList)
+    print(likedList)
     
     
     allPosts = Posts.objects.all().order_by('-date_created')
