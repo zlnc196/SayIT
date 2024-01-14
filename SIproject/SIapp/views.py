@@ -70,6 +70,7 @@ def homepage(request):
             currentUser = 0
         else:
             route = 'homepage.html'
+            print(currentUser)
     else:
         try:
             likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
