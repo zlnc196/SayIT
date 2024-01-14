@@ -16,6 +16,18 @@
 
 </form>
 
+<script> 
+    const likeSession = [];
+    const unlikeSession = [];
+    let likedList = "{{likeSession}}".split('-');
+    let objID;
+    let likes;
+    
+
+
+
+</script>
+
 {% for objs in allPosts %}
 
     <div class='posts'>
@@ -23,81 +35,48 @@
 
         <p class='ppost'> {{objs.post}} </p>
         <p class='pdate'> {{objs.date}} </p>
-        <p class='plikes' id="{{objs.id}}" > Likes = {{objs.likes}} </p>
-        <button onclick="Add({{objs.id}}, {{objs.likes}}, {{likedList}})" id="Lpost"> Like post </button>
+        <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+        <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}"> Like post </button>
     
         
     </div>
 
     <script>
-      
-        const likeSession = [];
-        const unlikeSession = [];
-    
-        
-        if (likedList.includes(objd.id))
-        {
-            document.getElementById("Lpost").innerHTML = "Unlike Post";
-            console.log("alr in");
-            
+
+        objID = "{{objs.id}}";
+        if (likedList.includes(objID)) {
+            document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
+            console.log("yuh");
         }
     
-        function Add(id, likes, alreadyLiked)
-        {
-            console.log(id);
-            console.log(likes);
-            console.log(alreadyLiked);
-            
-            
-            if (likeSession.includes(id) || unlikeSession.includes(id))
-            {
-                if (likeSession.includes(id))
-                {
-                    let ind = likeSession.indexOf(id);
-                    likeSession.splice(ind, 1);
-                    console.log(`Liked posts are ${likeSession}`);
-                    console.log(`Unliked posts are ${unlikeSession}`);
-                    document.getElementById(id).innerHTML = "Likes = " + (likes);
-                    document.getElementById('Lpost').innerHTML = "LikePost";
-
-                    document.getElementById('likeProcess').value = likeSession.join("-");
         
+       
+    
+        function Add(id, likes)
+        {
+            if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
+                document.getElementById("Lpost"+id).innerHTML = "Like Post";
+                unlikeSession.push(id);
+                document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+                if (likeSession.includes(id)) {
+                    likeSession.splice(unlikeSession.indexOf(id), 1);
                 }
-                else if (unlikeSession.includes(id))
-                {
-                    let ind = unlikeSession.indexOf(id);
-                    unlikeSession.splice(ind, 1);
-                    document.getElementById('Lpost').innerHTML = "Unlike Post";
-                    console.log(`Liked posts are ${likeSession}`);
-                    console.log(`Unliked posts are ${unlikeSession}`);
-                    document.getElementById(id).innerHTML = "Likes = " + (likes);
-                    document.getElementById('unlikeProcess').value = likeSession.join("-");
+                document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
 
-                }
-            
+
             }
-            else 
-            {
-                if (alreadyLiked.includes(String(id)))
-                {
-                    unlikeSession.push(id);
-                    document.getElementById('unlikeProcess').value = unlikeSession.join("-");
-                    document.getElementById('Lpost').innerHTML = "Unlike Post";
-                    document.getElementById(id).innerHTML = "Likes = " + (likes -1);
-                    console.log(`Liked posts are ${likeSession}`);
-                    console.log(`Unliked posts are ${unlikeSession}`);
+            else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
+                document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+                likeSession.push(id);
+                document.getElementById('likeProcess').value = likeSession.join("-");
+                if (unlikeSession.includes(id)) {
+                    unlikeSession.splice(unlikeSession.indexOf(id), 1);
                 }
-                else
-                {
-                    likeSession.push(id);
-                    document.getElementById('likeProcess').value = likeSession.join("-");
-                    document.getElementById(id).innerHTML = "Likes = " + (likes +1);
-                    console.log(`Liked posts are ${likeSession}`);
-                    console.log(`Unliked posts are ${unlikeSession}`);
-                    document.getElementById('Lpost').innerHTML = "Unlike Post";
-                }
-            
+                document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
             }
+            
+            
+            
         }
         
 
