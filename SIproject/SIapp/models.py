@@ -16,5 +16,6 @@ class Posts(models.Model):
     date = models.CharField(max_length=50, default='26/12/25')
     likes = models.IntegerField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
+    img = models.ImageField(upload_to="images", default=False)
     
     
