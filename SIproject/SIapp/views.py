@@ -172,12 +172,13 @@ def profile(request):
         postValid = False
         
     try:
-        image = request.POST['image']
-        print(image)
-        print("image")
+        image = request.FILES['image']
+        
         imageValid = True
+        print("image is valid")
     except:
         imageValid = False
+        print("image isnt valid")
     
     if post == "":
         postValid = False
@@ -187,8 +188,12 @@ def profile(request):
     for word in post.split():
         if word.lower() in bannedWords:
             post = 'Invalid due to hate speech'
-    if postValid == True:     
-        Posts.objects.create(post=post, user=currentUser, date = timeOfPost, likes = 0)
+    if postValid == True:   
+        if imageValid:  
+            Posts.objects.create(post=post, user=currentUser, date = timeOfPost, likes = 0, img=image)
+        else:
+            Posts.objects.create(post=post, user=currentUser, date = timeOfPost, likes = 0)
+            
     usersPosts = Posts.objects.filter(user=currentUser).order_by("-date_created")
     route = 'profile.html'
     

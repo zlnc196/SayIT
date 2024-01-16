@@ -38,8 +38,10 @@
 {% for objs in uposts %}
     <div class='posts'>
         <h3 class='pname'> @ {{objs.user}} </h3>
-
         <p class='ppost'> {{objs.post}} </p>
+        {% if objs.img != "False" %}
+            <img src="{{objs.img.url}}" width="200" height="200">
+        {% endif %}
         <p class='pdate'> {{objs.date}} </p>
         <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
         <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
