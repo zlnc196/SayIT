@@ -169,6 +169,7 @@ def profile(request):
         post = request.POST['post']
         postValid = True
     except:
+        post=""
         postValid = False
         
     try:
@@ -188,7 +189,7 @@ def profile(request):
     for word in post.split():
         if word.lower() in bannedWords:
             post = 'Invalid due to hate speech'
-    if postValid == True:   
+    if postValid == True or imageValid:   
         if imageValid:  
             Posts.objects.create(post=post, user=currentUser, date = timeOfPost, likes = 0, img=image)
         else:
