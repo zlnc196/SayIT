@@ -170,6 +170,14 @@ def profile(request):
         postValid = True
     except:
         postValid = False
+        
+    try:
+        image = request.POST['image']
+        print(image)
+        print("image")
+        imageValid = True
+    except:
+        imageValid = False
     
     if post == "":
         postValid = False
