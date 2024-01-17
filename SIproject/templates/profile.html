@@ -4,7 +4,14 @@
 
 {% block content %}
 
+<img src="{{CurrentUser.profilePicture.url}}" width="200" height="200">
 <h1> @{{cuser}}'s profile </h1>
+
+<form method='post' action='editProfile'>
+    {% csrf_token %}
+
+    <button type='submit'>Edit Profile </button>
+</form>
 
 <form method='post' action='homepage'>
 

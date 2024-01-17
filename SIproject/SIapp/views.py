@@ -210,7 +210,7 @@ def profile(request):
     
     
     
-    return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList })
+    return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers })
 
 
 
@@ -258,6 +258,10 @@ def LikedPosts(request):
     
     
     return render(request, 'liked.html', {"likedPosts": likedPosts, "cuser": currentUser})
+
+
+def editProfile(request):
+    return render(request, 'editProfile.html')
     
     
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<form method='post' enctype="multipart/form-data">
+    {%csrf_token%}
+    <input type="file" name="image" accept="image/*">
+    <button type='submit' id='spost'> Change profile picture </button>
+
+
+</form>
+
+
+{% endblock %}

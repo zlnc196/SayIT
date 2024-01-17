@@ -10,5 +10,6 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('dprofile', views.dprofile, name='dprofile'),
     path('AllPosts', views.AllPosts, name='AllPosts'),
-    path('likedPosts', views.LikedPosts, name='likedPosts')
+    path('likedPosts', views.LikedPosts, name='likedPosts'),
+    path('editProfile', views.editProfile, name='editProfile')
     ]
