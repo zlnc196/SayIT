@@ -202,6 +202,8 @@ def profile(request):
     
     likedList = cusers.liked_posts
     likedList = "-".join(likedList)
+    allUsers = Users.objects.all()
+    
   
     
     
@@ -210,7 +212,7 @@ def profile(request):
     
     
     
-    return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers })
+    return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers, 'allUsers': allUsers  })
 
 
 
@@ -236,7 +238,8 @@ def dprofile(request):
 def AllPosts(request):
     global currentUser
     cusers = Users.objects.filter(username=currentUser).first()
-    
+    allUsers = Users.objects.all()
+
     likedList = cusers.liked_posts
     likedList = "-".join(likedList)
     print(likedList)
@@ -244,7 +247,7 @@ def AllPosts(request):
     
     allPosts = Posts.objects.all().order_by('-date_created')
   
-    return render(request,'AllPosts.html', {'allPosts':allPosts, 'cusers': cusers, "likedList": likedList })
+    return render(request,'AllPosts.html', {'allPosts':allPosts, 'cusers': cusers, "likedList": likedList, 'allUsers': allUsers })
 
 
 def LikedPosts(request):
@@ -253,15 +256,29 @@ def LikedPosts(request):
     user = Users.objects.filter(username = currentUser).first()
     likeList = user.liked_posts 
     likedPosts = Posts.objects.filter(id__in=likeList)
+    allUsers = Users.objects.all()
+
+    
     
         
     
     
-    return render(request, 'liked.html', {"likedPosts": likedPosts, "cuser": currentUser})
+    return render(request, 'liked.html', {"likedPosts": likedPosts, "cuser": currentUser, 'allUsers': allUsers })
 
 
 def editProfile(request):
-    return render(request, 'editProfile.html')
+    cusers = Users.objects.filter(username=currentUser).first()
+    
+    return render(request, 'editProfile.html', {"CurrentUser":cusers})
+
+def changedProfile(request):
+    newBio = request.POST['newBio']
+    newPfp = request.FILES['newPfp']
+    cusers = Users.objects.filter(username=currentUser).first()
+    cusers.bio = newBio
+    cusers.profilePicture = newPfp
+    cusers.save()
+    return render(request, 'profile.html')
     
     
 

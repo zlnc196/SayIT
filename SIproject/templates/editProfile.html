@@ -4,13 +4,28 @@
 
 {% block content %}
 
-<form method='post' enctype="multipart/form-data">
+
+<h3> Your current profile picture </h3>
+
+<img src="{{CurrentUser.profilePicture.url}}">
+
+<form method='post' action='changedProfile' enctype="multipart/form-data">
     {%csrf_token%}
-    <input type="file" name="image" accept="image/*">
-    <button type='submit' id='spost'> Change profile picture </button>
+    <input type="file" name="newPfp" accept="image/*">
+    
+    <h3> Your current Bio </h3>
+    <input type='textarea' name='newBio' value="{{CurrentUser.bio}}">
+    
+    <button type='submit' id='spost'> Save changes </button>
 
 
 </form>
+
+
+
+
+
+
 
 
 {% endblock %}

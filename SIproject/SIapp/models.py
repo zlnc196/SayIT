@@ -9,6 +9,7 @@ class Users(models.Model):
     password = models.CharField(max_length=50)
     liked_posts= ArrayField(models.CharField(max_length=100, default=[]))
     profilePicture = models.ImageField(upload_to="media", default='media\pfp.png')
+    bio = models.CharField(max_length=100, default = "user has no bio")
     
     
 class Posts(models.Model):

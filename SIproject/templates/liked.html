@@ -21,7 +21,18 @@
 
 
 <div class='posts'>
-    <h3 class='pname'> @{{objs.user}} </h3>
+    <div class='user-info'>
+
+        {% for user in allUsers%}
+            {% if user.username == objs.user %}
+                <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+            {% endif %}
+        {% endfor %}
+
+   
+        <h3 class='pname'>{{objs.user}} </h3>
+
+    </div>
 
     <p class='ppost'> {{objs.post}} </p>
     <p class='pdate'> {{objs.date}} </p>

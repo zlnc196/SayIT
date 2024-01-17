@@ -19,6 +19,7 @@ body {
 
 .pname {
     font-size: 40px;
+    margin-left: 10px;
 }
 
 .ppost {
@@ -150,4 +151,13 @@ body {
 
 .hide {
     visibility: hidden;
+}
+
+.user-info {
+    display: flex; /* Use flexbox to keep children in a row */
+    align-items: center; /* Align items vertically in the center */
+}
+
+.ppfp {
+    border-radius: 50px;
 }
