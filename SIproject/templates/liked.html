@@ -35,6 +35,9 @@
     </div>
 
     <p class='ppost'> {{objs.post}} </p>
+    {% if objs.img != "False" %}
+            <img src="{{objs.img.url}}" width="200" height="200">
+    {% endif %}
     <p class='pdate'> {{objs.date}} </p>
     <p class='plikes' id="{{objs.id}}" > Likes = {{objs.likes}} </p>
 
