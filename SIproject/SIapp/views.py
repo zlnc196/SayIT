@@ -4,13 +4,15 @@ from .models import Users, Posts
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import datetime
+from django.contrib.auth import get_user_model, authenticate, login as auth_login, logout
 # Create your views here.
 
-global currentUser
-global loginValid
+
 loginValid = False
 
 def intro(request):
+    print(request.user.username)
+    logout(request)
     return render(request, 'intro.html')
 
 def register(request):
@@ -24,7 +26,7 @@ def confirm(request):
     email = request.POST['Email']
     username = request.POST['username']
     password = request.POST['password']
-    Users.objects.create(email=email, username=username, password=password, liked_posts=[] )
+    
     
     
     valid = False
@@ -32,9 +34,15 @@ def confirm(request):
     for char in password:
         if char in nums and len(password) >= 8:
             valid = True
-            regDirection = 'login.html'
-        else:
-            regDirection = 'register.html'
+
+            
+    if valid == True:
+        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = '2022-01-19 14:30:45.123456-05:00' ,first_name = 'Dont', last_name = 'Worry', liked_posts=[])
+        user.save()
+        regDirection = 'login.html'
+    else:
+        regDirection = 'register.html'
+
         
     
     
@@ -47,31 +55,35 @@ def confirm(request):
 
 
 def homepage(request):
-    global currentUser
-    global loginValid
-    UserData = Users.objects.all()
+    UserData = get_user_model().objects.all()
     idholder = 0
-    print(loginValid)
-    if loginValid != True:
+    loginValid=False
+    
+    print(request.user.username)
+    if not request.user.is_authenticated:
         try:
             username = request.POST['lusername']
             password = request.POST['lpassword']
-        except:
-            route = 'login.html'
-            username = '0'
-            password = '0'
+        
 
-        for objs in UserData:
-            if objs.username == username and objs.password == password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
                 loginValid = True
-                currentUser = objs.username
-        if loginValid == False:
+                currentUser = username
+                auth_login(request, user)  # Log in the user
+                route = 'homepage.html'
+                print("yeah")
+            else:
+                loginValid = False
+                route = 'login.html'
+                currentUser = None
+                print("nah")
+        except KeyError:
             route = 'login.html'
-            currentUser = 0
-        else:
-            route = 'homepage.html'
-            print(currentUser)
+        
     else:
+        route='homepage.html'
+        currentUser = request.user.username
         try:
             likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
             unlikeProcess = request.POST["unlikeProcess"] 
@@ -105,7 +117,7 @@ def homepage(request):
             
             
             for elem in likeArray:
-                idholder = Users.objects.filter(username=currentUser).first()
+                idholder = request.user
                 
                 print("here we go-adding")
                 try:
@@ -127,7 +139,7 @@ def homepage(request):
             
             
             for elem in unlikeArray:
-                idholder = Users.objects.filter(username=currentUser).first()    
+                idholder = request.user
                 print("here we go-deleting")
                 try:
                     testHolder = int(elem)
@@ -162,7 +174,8 @@ def homepage(request):
 
 
 def profile(request):
-    print(currentUser)
+    cusers = request.user
+    currentUser = request.user.username
     etimeOfPost = datetime.datetime.now()
     timeOfPost = etimeOfPost.strftime('%c')
     try:
@@ -191,18 +204,18 @@ def profile(request):
             post = 'Invalid due to hate speech'
     if postValid == True or imageValid:   
         if imageValid:  
-            Posts.objects.create(post=post, user=currentUser, date = timeOfPost, likes = 0, img=image)
+            Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, img=image)
         else:
-            Posts.objects.create(post=post, user=currentUser, date = timeOfPost, likes = 0)
+            Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0)
             
-    usersPosts = Posts.objects.filter(user=currentUser).order_by("-date_created")
+    usersPosts = Posts.objects.filter(user=cusers.id).order_by("-date_created")
     route = 'profile.html'
     
-    cusers = Users.objects.filter(username=currentUser).first()
+    cusers = request.user
     
     likedList = cusers.liked_posts
     likedList = "-".join(likedList)
-    allUsers = Users.objects.all()
+    allUsers = get_user_model().objects.all()
     
   
     
@@ -217,17 +230,18 @@ def profile(request):
 
 
 def dprofile(request):
-    global currentUser
+    currentUser = request.user.username
+    cusers = request.user
     
     delpost = request.POST['delpost']
     
     
     
     
-    Posts.objects.filter(id=delpost).delete()
+    Posts.objects.get(id=delpost).delete()
         
-    usersPosts = Posts.objects.filter(user=currentUser)
-    for users in Users.objects.all():
+    usersPosts = Posts.objects.filter(user=cusers.id)
+    for users in get_user_model().objects.all():
         likeList = users.liked_posts 
         if str(delpost) in likeList: 
             likeList.remove(delpost)
@@ -236,9 +250,9 @@ def dprofile(request):
 
 
 def AllPosts(request):
-    global currentUser
-    cusers = Users.objects.filter(username=currentUser).first()
-    allUsers = Users.objects.all()
+    currentUser = request.user.username
+    cusers = request.user
+    allUsers = get_user_model().objects.all()
 
     likedList = cusers.liked_posts
     likedList = "-".join(likedList)
@@ -251,12 +265,12 @@ def AllPosts(request):
 
 
 def LikedPosts(request):
-    global currentUser
+    currentUser = request.user.username
     usersPosts = Posts.objects.all()
-    user = Users.objects.filter(username = currentUser).first()
-    likeList = user.liked_posts 
+    cuser = request.user
+    likeList = cuser.liked_posts 
     likedPosts = Posts.objects.filter(id__in=likeList)
-    allUsers = Users.objects.all()
+    allUsers = get_user_model().objects.all()
 
     
     
@@ -267,18 +281,23 @@ def LikedPosts(request):
 
 
 def editProfile(request):
-    cusers = Users.objects.filter(username=currentUser).first()
+    cusers = request.user
     
     return render(request, 'editProfile.html', {"CurrentUser":cusers})
 
 def changedProfile(request):
     newBio = request.POST['newBio']
-    newPfp = request.FILES['newPfp']
-    cusers = Users.objects.filter(username=currentUser).first()
+    try:
+        newPfp = request.FILES['newPfp']
+    except KeyError:
+        newPfp = request.user.profilePicture
+    cusers = request.user
     cusers.bio = newBio
     cusers.profilePicture = newPfp
     cusers.save()
-    return render(request, 'profile.html')
+    currentUser = request.user.username
+    usersPosts = Posts.objects.filter(user=cusers.id)
+    return render(request, 'profile.html', {'cuser':currentUser, 'uposts':usersPosts, 'CurrentUser':cusers})
     
     
 
