@@ -33,14 +33,43 @@
         {% csrf_token %}
         <button type='submit' class = 'topbuttons'> Posts from followed accounts </button>
     </form>
-
-    <form method='post'>
-        {% csrf_token %}
-        <input for='text' placeholder='search' class='searcher'>
-    </form>
+    <div class='searchSection'>
+        <form method='post' action='search'>
+            {% csrf_token %}
+                <input for='text' placeholder='search' class='searcher' oninput="updateSearchButtons()" name='searchedFor'>
+                <button id="searchPost" type ='submit' onclick="postOrUser('post')"></button>
+                <button id="searchUser" type='submit' onclick="postOrUser('user')"></button>
+                <input type = "hidden" id="userOrPost" name='userOrPost'>
+        </form>
+    </div>
 </div>
+
+<script>
+
+    console.log("hello world")
+
+    
+    function updateSearchButtons() {
+        currentSearch = document.querySelector(".searcher").value;
+        document.getElementById("searchPost").innerHTML = `search for '${currentSearch}' in Posts'`;
+        document.getElementById("searchUser").innerHTML = `search for '${currentSearch}' in Users'`;
+
+    }
+
+    function postOrUser(x) {
+        document.getElementById('userOrPost').value = x;
+        console.log("pls be fixed")
+        console.log(document.getElementById('userOrPost').value);
+
+    }
+    
+    
+
+</script>
 
     
 
 
 {% endblock %}
+
+

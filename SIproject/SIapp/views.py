@@ -298,6 +298,24 @@ def changedProfile(request):
     currentUser = request.user.username
     usersPosts = Posts.objects.filter(user=cusers.id)
     return render(request, 'profile.html', {'cuser':currentUser, 'uposts':usersPosts, 'CurrentUser':cusers})
+
+def search(request):
+    UorP = request.POST['userOrPost']
+    searchedFor = request.POST['searchedFor']
+    returnDict = {}
+    print(UorP)
+    if UorP == 'post':
+        selectedPosts = Posts.objects.filter(post__icontains = searchedFor)
+        route = 'searchedPosts.html'
+        returnDict['selectedPosts'] = selectedPosts
+    else:
+        selectedUsers = get_user_model().objects.filter(username__icontains = searchedFor)
+        route = 'searchedUsers.html'
+        returnDict['selectedUsers'] = selectedUsers
+        
+    return render(request, route, returnDict)
+    
+    
     
     
 
