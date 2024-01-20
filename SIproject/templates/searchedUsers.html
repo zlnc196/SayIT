@@ -6,4 +6,26 @@
 
 <h1> Users based on your search </h1>
 
+{% for objs in selectedUsers %}
+
+
+<form method='post'>
+    {% csrf_token %}
+
+    <button class="userDisplayBlock user-info posts" type='submit'>
+
+    
+        <img src="{{objs.profilePicture.url }}" width='150' height='150' class='largePfp'>
+        <div>
+            <h2> @{{objs.username}} </h2>
+            <p> {{objs.bio}} </p3>
+        </div>
+        
+
+    </button>
+
+<form>
+
+{% endfor %}
+
 {% endblock %}

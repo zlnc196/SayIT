@@ -303,6 +303,7 @@ def search(request):
     UorP = request.POST['userOrPost']
     searchedFor = request.POST['searchedFor']
     returnDict = {}
+    cusers = request.user
     print(UorP)
     if UorP == 'post':
         selectedPosts = Posts.objects.filter(post__icontains = searchedFor)
@@ -312,7 +313,10 @@ def search(request):
         selectedUsers = get_user_model().objects.filter(username__icontains = searchedFor)
         route = 'searchedUsers.html'
         returnDict['selectedUsers'] = selectedUsers
-        
+    likedList = cusers.liked_posts
+    likedList = "-".join(likedList)
+    returnDict['likedList'] = likedList
+    
     return render(request, route, returnDict)
     
     

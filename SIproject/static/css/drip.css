@@ -161,3 +161,7 @@ body {
 .ppfp {
     border-radius: 50px;
 }
+
+.largePfp {
+    border-radius: 150px
+}
