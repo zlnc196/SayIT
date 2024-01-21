@@ -318,9 +318,28 @@ def search(request):
     returnDict['likedList'] = likedList
     
     return render(request, route, returnDict)
+
+def otherProfile(request):
+    otherUserId = request.POST['otherUser']
+    print(f'other user id is {otherUserId}')
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    otherUsersPosts = Posts.objects.filter(user=otherUser).order_by("-date_created")
     
     
+    likedList = otherUser.liked_posts
+    likedList = "-".join(likedList)
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList})
     
+    
+def otherLikedPosts(request):
+    otherUserId = request.POST['otherUser2']
+    print(f'other user id is {otherUserId}')
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    likeList = otherUser.liked_posts 
+    likedPosts = Posts.objects.filter(id__in=likeList)
+    allUsers = get_user_model().objects.all()
+    
+    return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers })    
     
 
 

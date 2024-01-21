@@ -13,5 +13,7 @@ urlpatterns = [
     path('likedPosts', views.LikedPosts, name='likedPosts'),
     path('editProfile', views.editProfile, name='editProfile'),
     path('changedProfile', views.changedProfile, name='changedProfile'),
-    path('search', views.search, name='search')
+    path('search', views.search, name='search'),
+    path('otherProfile', views.otherProfile, name='otherProfile'),
+    path('otherLikedPosts', views.otherLikedPosts, name='otherLikedPosts'),
 ]

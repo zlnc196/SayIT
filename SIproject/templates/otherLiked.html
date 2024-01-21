@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<h1> @{{otherUser}}'s Liked posts </h1>
+
+<form method='post' action='homepage'>
+
+    {% csrf_token %}
+
+    <button type='submit'> Return to home </button>
+    <input type = "hidden" id="likeProcess" name='likeProcess'>
+
+</form>
+
+{% for objs in likedPosts %}
+
+
+
+<div class='posts'>
+    <div class='user-info'>
+
+        {% for user in allUsers%}
+            {% if user.username == objs.user.username %}
+                <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+            {% endif %}
+        {% endfor %}
+
+   
+        <h3 class='pname'>{{objs.user.username}} </h3>
+
+    </div>
+
+    <p class='ppost'> {{objs.post}} </p>
+    {% if objs.img != "False" %}
+            <img src="{{objs.img.url}}" width="200" height="200">
+    {% endif %}
+    <p class='pdate'> {{objs.date}} </p>
+    <p class='plikes' id="{{objs.id}}" > Likes = {{objs.likes}} </p>
+
+   
+     
+</div>
+
+
+
+{% endfor %}
+
+
+
+{% endblock %}

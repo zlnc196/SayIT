@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'>
+<h1> @{{otherUser.username}}'s profile </h1>
+
+<p> {{otherUser.bio}} </p>
+
+
+<form method='post' action='homepage'>
+
+    {% csrf_token %}
+
+    <button type='submit'> Return to home </button>
+    <input type = "hidden" id="likeProcess" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
+
+</form>
+
+<script> 
+    const likeSession = [];
+    const unlikeSession = [];
+    let likedList = "{{likedList}}".split('-');
+    let objID;
+    let likes;
+
+</script>
+
+
+<form method='post' action="otherLikedPosts">
+
+    {% csrf_token %}
+
+    <button type='submit'> Liked posts </button>
+    <input type='hidden' value='{{otherUser.id}}' name='otherUser2'>
+    
+
+</form>
+
+{% for objs in otherUsersPosts %}
+    <div class='posts'>
+        <div class='user-info'>
+
+            {% for user in allUsers%}
+                {% if user.username == objs.user.username %}
+                    <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                {% endif %}
+            {% endfor %}
+
+       
+            <h3 class='pname'>{{objs.user.username}} </h3>
+
+        </div>
+        <p class='ppost'> {{objs.post}} </p>
+        {% if objs.img != "False" %}
+            <img src="{{objs.img.url}}" width="200" height="200">
+        {% endif %}
+        <p class='pdate'> {{objs.date}} </p>
+        <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+        <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+         
+    </div>
+
+    <script>
+
+        objID = "{{objs.id}}";
+        if (likedList.includes(objID)) {
+            document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
+            console.log("yuh");
+        }
+    
+        
+       
+    
+        function Add(id, likes)
+        {
+            console.log("Hello");
+            if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
+                document.getElementById("Lpost"+id).innerHTML = "Like Post";
+                unlikeSession.push(id);
+                document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+                if (likeSession.includes(id)) {
+                    likeSession.splice(unlikeSession.indexOf(id), 1);
+                }
+                document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
+
+
+            }
+            else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
+                document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+                likeSession.push(id);
+                document.getElementById('likeProcess').value = likeSession.join("-");
+                if (unlikeSession.includes(id)) {
+                    unlikeSession.splice(unlikeSession.indexOf(id), 1);
+                }
+                document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
+            }
+            
+            
+            
+        }
+        
+
+    </script>
+
+{% endfor %}
+
+
+
+    
+
+
+{% endblock %}

@@ -6,26 +6,38 @@
 
 <h1> Users based on your search </h1>
 
+
 {% for objs in selectedUsers %}
 
 
-<form method='post'>
+<form method='post' action='otherProfile'>
     {% csrf_token %}
 
-    <button class="userDisplayBlock user-info posts" type='submit'>
+    <input type='hidden' id='otherUser' name='otherUser'>
+
+    <button class="userDisplayBlock user-info posts" type='submit' onclick="oname('{{objs.id}}')">
 
     
         <img src="{{objs.profilePicture.url }}" width='150' height='150' class='largePfp'>
         <div>
             <h2> @{{objs.username}} </h2>
-            <p> {{objs.bio}} </p3>
+            <p> {{objs.bio}} </p>
         </div>
         
 
     </button>
 
-<form>
+</form>
 
 {% endfor %}
+
+<script>
+
+    function oname(x)
+    {
+        document.getElementById('otherUser').value = x;
+    }
+
+</script>
 
 {% endblock %}
