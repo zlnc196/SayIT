@@ -24,6 +24,7 @@ body {
 
 .ppost {
     font-size: 30px;
+    left: 0px;
 }
 
 .pdate {
@@ -147,6 +148,15 @@ body {
 
 .posts {
     background-color: white;
+
+}
+
+
+.postsButton {
+    background-color: white;
+    border: none;
+    width: 75%;
+    text-align: left
 }
 
 .hide {
@@ -165,3 +175,4 @@ body {
 .largePfp {
     border-radius: 150px
 }
+

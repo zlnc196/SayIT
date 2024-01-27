@@ -341,5 +341,16 @@ def otherLikedPosts(request):
     
     return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers })    
     
+    
+def replies(request):
+    
+    postId = request.POST["selectedPost"]
+    
+    selectedPost = Posts.objects.get(id=postId)
+    currentUser = request.user
+    likedList = currentUser.liked_posts
+    likedList = "-".join(likedList)
+    
+    return render(request, "replies.html", {"post": selectedPost, "likedList":likedList})
 
 

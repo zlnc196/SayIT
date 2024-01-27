@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% load static %}  
+
+{% block content %}
+
+
+<form method='post' action='homepage'>
+
+    {% csrf_token %}
+
+    <button type='submit'> Return to home </button>
+    <input type = "hidden" id="likeProcess" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
+
+</form>
+
+<script> 
+    const likeSession = [];
+    const unlikeSession = [];
+    let likedList = "{{likedList}}".split('-');
+    let objID;
+    let likes;
+
+</script>
+
+
+<h1> Replies to post </h1>
+
+
+<div class='posts' >
+            
+    <div class='user-info'>
+
+       
+        <img src="{{ post.user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+         
+
+        <h3 class='pname'>{{ post.user.username}} </h3>
+
+    </div>
+    
+    <p class='ppost'> {{post.post}} </p>
+    {% if objs.img != "False" %}
+        <img src="{{post.img.url}}" width="200" height="200">
+    {% endif %}
+    <p class='pdate'> {{post.date}} </p>
+    <p class='plikes' id="Likes{{post.id}}" > Likes = {{post.likes}} </p>
+    <button onclick="Add({{post.id}}, {{post.likes}})" id="Lpost{{post.id}}">Like Post</button>
+
+
+</div>
+
+
+<script>
+
+    console.log(likedList);
+
+    objID = "{{post.id}}";
+    if (likedList.includes("{{post.id}}")) {
+        document.getElementById("Lpost{{post.id}}").innerHTML = "Unlike Post";
+        console.log("yuh");
+    }
+
+    
+   
+
+    function Add(id, likes)
+    {
+        console.log("Hello");
+        if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
+            document.getElementById("Lpost"+id).innerHTML = "Like Post";
+            unlikeSession.push(id);
+            document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+            if (likeSession.includes(id)) {
+                likeSession.splice(unlikeSession.indexOf(id), 1);
+            }
+            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
+
+
+        }
+        else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
+            document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+            likeSession.push(id);
+            document.getElementById('likeProcess').value = likeSession.join("-");
+            if (unlikeSession.includes(id)) {
+                unlikeSession.splice(unlikeSession.indexOf(id), 1);
+            }
+            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
+        }
+        
+        
+        
+    }
+    
+
+</script>
+
+    
+
+
+
+
+
+
+
+
+
+{% endblock %}

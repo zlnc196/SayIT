@@ -16,4 +16,5 @@ urlpatterns = [
     path('search', views.search, name='search'),
     path('otherProfile', views.otherProfile, name='otherProfile'),
     path('otherLikedPosts', views.otherLikedPosts, name='otherLikedPosts'),
+    path('replies', views.replies, name="replies")
 ]

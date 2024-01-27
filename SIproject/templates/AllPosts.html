@@ -27,31 +27,41 @@
 
 {% for objs in allPosts %}
 
-    <div class='posts'>
-        
-        <div class='user-info'>
+    <form method="post" action="replies">
 
-            {% for user in allUsers%}
-                {% if user.username == objs.user.username %}
-                    <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
-                {% endif %}
-            {% endfor %}
+        {% csrf_token %}
 
-       
-            <h3 class='pname'>{{objs.user.username}} </h3>
+        <input type="hidden" id="selectedPost" name="selectedPost">
+        <button class='postsButton' onclick="getPost({{objs.id}})">
+            
+            <div class='user-info'>
 
-        </div>
+                {% for user in allUsers%}
+                    {% if user.username == objs.user.username %}
+                        <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                    {% endif %}
+                {% endfor %}
+
         
-        <p class='ppost'> {{objs.post}} </p>
-        {% if objs.img != "False" %}
-            <img src="{{objs.img.url}}" width="200" height="200">
-        {% endif %}
-        <p class='pdate'> {{objs.date}} </p>
-        <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-        <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-    
+                <h3 class='pname'>{{objs.user.username}} </h3>
+
+            </div>
+            
+            <p class='ppost'> {{objs.post}} </p>
+            {% if objs.img != "False" %}
+                <img src="{{objs.img.url}}" width="200" height="200">
+            {% endif %}
+            <p class='pdate'> {{objs.date}} </p>
+            <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+            <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
         
-    </div>
+            
+        </button>
+
+        <br>
+        <br>
+    </form>
+
 
     <script>
 
@@ -99,6 +109,15 @@
 
 
 {% endfor %}
+
+
+<script>
+    function getPost(x) {
+        document.getElementById("selectedPost").value = x
+    }
+
+
+</script>
 
 
 {% endblock %}
