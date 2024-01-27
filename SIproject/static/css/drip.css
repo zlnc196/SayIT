@@ -199,3 +199,16 @@ body {
 
 
 }
+
+.sreply {
+    background-color: rgb(28, 138, 202);
+    color: white;
+    border-width: 0px;
+    border-radius: 40px;
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    left: 65%;
+    transform: translate(0px, 300px);
+
+}

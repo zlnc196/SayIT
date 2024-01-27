@@ -98,7 +98,19 @@
 
 <br>
 <br>
-<textarea rows="10" cols="30"placeholder='Reply to post' class="replyPoster"></textarea>
+
+
+
+<form method="post" action="profile">
+
+    {% csrf_token %}
+
+   
+    <textarea rows="10" cols="30"placeholder='Reply to post' class="replyPoster"> reply to @{{post.user.username}} </textarea>
+    
+    <button type="submit" class="sreply"> Submit</button>
+
+</form>
 
     
 
