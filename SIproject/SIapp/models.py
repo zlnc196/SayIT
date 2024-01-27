@@ -19,6 +19,7 @@ class CustomUser(AbstractUser):
     liked_posts= ArrayField(models.CharField(max_length=100, default=[]))
     profilePicture = models.ImageField(upload_to="media", default='media\pfp.png')
     bio = models.CharField(max_length=100, default = "user has no bio")
+    followers = models.IntegerField(default=0)
     def __str__(self):
         return self.username
     groups = None
@@ -31,6 +32,7 @@ class Posts(models.Model):
     likes = models.IntegerField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
     img = models.ImageField(upload_to="media", default=False)
+    replies = ArrayField(models.CharField(max_length=100, default=[]))
     
     
     
