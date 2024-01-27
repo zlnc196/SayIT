@@ -6,7 +6,7 @@
 
 <form method='post' action='profile' enctype="multipart/form-data">
     {%csrf_token%}
-    <textarea id='poster' rows="10" cols="30" name='post' placeholder='Whats on your mind?'></textarea>
+    <textarea class='poster' rows="10" cols="30" name='post' placeholder='Whats on your mind?'></textarea>
     <input type="file" name="image" accept="image/*">
     <button type='submit' id='spost'> Post </button>
 
