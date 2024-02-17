@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import smtplib
 from .models import Users, Posts
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import datetime
 from django.contrib.auth import get_user_model, authenticate, login as auth_login, logout
+
 # Create your views here.
 
 
@@ -39,9 +40,8 @@ def confirm(request):
     if valid == True:
         user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = '2022-01-19 14:30:45.123456-05:00' ,first_name = 'Dont', last_name = 'Worry', liked_posts=[])
         user.save()
-        regDirection = 'login.html'
-    else:
-        regDirection = 'register.html'
+        return redirect("login")
+    
 
         
     
@@ -51,7 +51,7 @@ def confirm(request):
     
     
     
-    return render(request, regDirection, {'Valid': valid})
+    return render(request, 'register.html', {'Valid': valid})
 
 
 def homepage(request):
@@ -345,7 +345,49 @@ def otherProfile(request):
     
     likedList = otherUser.liked_posts
     likedList = "-".join(likedList)
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList})
+    
+    currentUser = request.user
+    followList = currentUser.followedUsers
+    if otherUserId in followList:
+        followed = True
+    else:
+        followed = False
+    
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed})
+    
+    
+def followChange(request):
+    otherUserId = request.POST['otherUser']
+    print(f'other user id is {otherUserId}')
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    otherUsersPosts = Posts.objects.filter(user=otherUser).order_by("-date_created")
+    likedList = otherUser.liked_posts
+    likedList = "-".join(likedList)
+    currentUser = request.user
+    followList = currentUser.followedUsers
+    print(otherUser.id)
+    print(followList)
+    if otherUserId in followList:
+        currentUser.followedUsers.remove(otherUserId)
+        otherUser.followers -= 1
+        print("Just unfollowed")
+        followed = False
+    elif otherUserId not in followList:
+        currentUser.followedUsers.append(otherUserId)
+        otherUser.followers += 1
+        print("Just followed")
+        followed = True
+    else:
+        print("Error")
+      
+      
+    currentUser.save()
+    otherUser.save()
+    
+
+    
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed})
+    
     
     
 def otherLikedPosts(request):
@@ -355,8 +397,10 @@ def otherLikedPosts(request):
     likeList = otherUser.liked_posts 
     likedPosts = Posts.objects.filter(id__in=likeList)
     allUsers = get_user_model().objects.all()
+    currentUser = request.user
     
-    return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers })    
+    
+    return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers, "currentUser": currentUser })    
     
     
 def replies(request):

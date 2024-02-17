@@ -7,13 +7,15 @@
 <h1> Users based on your search </h1>
 
 
-{% for objs in selectedUsers %}
+
 
 
 <form method='post' action='otherProfile'>
     {% csrf_token %}
 
     <input type='hidden' id='otherUser' name='otherUser'>
+
+    {% for objs in selectedUsers %}
 
     <button class="userDisplayBlock user-info posts" type='submit' onclick="oname('{{objs.id}}')">
 
@@ -27,9 +29,11 @@
 
     </button>
 
+    {% endfor %}
+
 </form>
 
-{% endfor %}
+
 
 <script>
 

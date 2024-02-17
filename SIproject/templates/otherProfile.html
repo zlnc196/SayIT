@@ -7,9 +7,18 @@
 <img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'> 
 <h1> @{{otherUser.username}}'s profile </h1>
 
-<form method="post">
+
+
+<h2> Followers = {{otherUser.followers}} </h2>
+
+<form method="post" action="userProfile">
     {% csrf_token %}
+    <input type='hidden' id='otherUser' name='otherUser' value='{{otherUser.id}}'>
+    {%if followed == True%}
+    <button> Unfollow </button>
+    {% else %}
     <button> Follow </button>
+    {% endif %}
 </form>
 
 

@@ -20,6 +20,7 @@ class CustomUser(AbstractUser):
     profilePicture = models.ImageField(upload_to="media", default='media\pfp.png')
     bio = models.CharField(max_length=100, default = "user has no bio")
     followers = models.IntegerField(default=0)
+    followedUsers = ArrayField(models.CharField(max_length=100, default=[]))
     def __str__(self):
         return self.username
     groups = None
