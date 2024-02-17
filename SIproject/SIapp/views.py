@@ -204,9 +204,22 @@ def profile(request):
             post = 'Invalid due to hate speech'
     if postValid == True or imageValid:   
         if imageValid:  
-            Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, img=image)
+            newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, img=image, replies=[])
         else:
-            Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0)
+            newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, replies=[])
+            
+        newPost.save()
+            
+            
+        replyCheck = request.POST["replyCheck"]
+        if replyCheck == "True":
+            print("should work")
+            repliedTo = request.POST["repliedTo"]
+            print(repliedTo)
+            postRepliedTo = Posts.objects.get(id=repliedTo)
+            postRepliedTo.replies.append(newPost.id)
+            postRepliedTo.save()
+        
             
     usersPosts = Posts.objects.filter(user=cusers.id).order_by("-date_created")
     route = 'profile.html'
@@ -245,8 +258,12 @@ def dprofile(request):
         likeList = users.liked_posts 
         if str(delpost) in likeList: 
             likeList.remove(delpost)
+            
+    likedList = cusers.liked_posts
+    likedList = "-".join(likedList)
+    allUsers = get_user_model().objects.all()
   
-    return render(request,'profile.html', {'cuser':currentUser, 'uposts':usersPosts})
+    return render(request,'profile.html', {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'allUsers': allUsers, 'CurrentUser':cusers })
 
 
 def AllPosts(request):
@@ -350,7 +367,15 @@ def replies(request):
     currentUser = request.user
     likedList = currentUser.liked_posts
     likedList = "-".join(likedList)
+    repliedList = selectedPost.replies
+    repliedPosts = Posts.objects.filter(id__in=repliedList)
+    allUsers = get_user_model().objects.all()
     
-    return render(request, "replies.html", {"post": selectedPost, "likedList":likedList})
+    return render(request, "replies.html", {"post": selectedPost, "likedList":likedList, "repliedPosts": repliedPosts, 'allUsers': allUsers})
+
+
+
+    
+    
 
 

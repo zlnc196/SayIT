@@ -212,3 +212,11 @@ body {
     transform: translate(0px, 300px);
 
 }
+
+
+.replies {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+
+}

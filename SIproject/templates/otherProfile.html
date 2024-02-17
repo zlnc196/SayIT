@@ -4,8 +4,15 @@
 
 {% block content %}
 
-<img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'>
+<img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'> 
 <h1> @{{otherUser.username}}'s profile </h1>
+
+<form method="post">
+    {% csrf_token %}
+    <button> Follow </button>
+</form>
+
+
 
 <p> {{otherUser.bio}} </p>
 

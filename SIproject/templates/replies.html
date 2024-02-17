@@ -41,7 +41,7 @@
     </div>
     
     <p class='ppost'> {{post.post}} </p>
-    {% if objs.img != "False" %}
+    {% if post.img != "False" %}
         <img src="{{post.img.url}}" width="200" height="200">
     {% endif %}
     <p class='pdate'> {{post.date}} </p>
@@ -50,6 +50,10 @@
 
 
 </div>
+
+
+
+
 
 
 <script>
@@ -101,16 +105,79 @@
 
 
 
-<form method="post" action="profile">
 
-    {% csrf_token %}
-
-   
-    <textarea rows="10" cols="30"placeholder='Reply to post' class="replyPoster"> reply to @{{post.user.username}} </textarea>
+<form method='post' action='profile' enctype="multipart/form-data">
+    {%csrf_token%}
+    <textarea rows="10" cols="30"placeholder='Reply to post' class="replyPoster" name="post"> reply to @{{post.user.username}} </textarea>
+    <input type="file" name="image" accept="image/*">
+    <button type='submit' class='sreply'> Post </button>
+    <input type="hidden" name="replyCheck" value="True">
+    <input type="hidden" name="repliedTo" value="{{post.id}}">
     
-    <button type="submit" class="sreply"> Submit</button>
+
+    
+
 
 </form>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{% for objs in repliedPosts %}
+
+<button class='postsButton replies' onclick="getPost({{objs.id}})">
+            
+    <div class='user-info'>
+
+        {% for user in allUsers%}
+            {% if user.username == objs.user.username %}
+                <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+            {% endif %}
+        {% endfor %}
+
+
+        <h3 class='pname'>{{objs.user.username}} </h3>
+
+    </div>
+    
+    <p class='ppost'> {{objs.post}} </p>
+    {% if objs.img != "False" %}
+        <img src="{{objs.img.url}}" width="200" height="200">
+    {% endif %}
+    <p class='pdate'> {{objs.date}} </p>
+    <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+    <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+
+    
+</button>
+
+<br>
+<br>
+<br>
+
+
+
+
+
+
+{% endfor %}
 
     
 
