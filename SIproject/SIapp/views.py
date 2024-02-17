@@ -281,6 +281,19 @@ def AllPosts(request):
     return render(request,'AllPosts.html', {'allPosts':allPosts, 'cusers': cusers, "likedList": likedList, 'allUsers': allUsers })
 
 
+def FollowedPosts(request):
+    currentUsername = request.user.username
+    currentUser = request.user
+    allUsers = get_user_model().objects.all()
+
+    likedList = currentUser.liked_posts
+    likedList = "-".join(likedList)
+    print(likedList)
+    followedList = currentUser.followedUsers
+    followedPosts = Posts.objects.filter(user__in=followedList).order_by('-date_created')
+  
+    return render(request,'followedPosts.html', {'followedPosts':followedPosts, 'currentUser': currentUser, "likedList": likedList, 'allUsers': allUsers })
+
 def LikedPosts(request):
     currentUser = request.user.username
     usersPosts = Posts.objects.all()

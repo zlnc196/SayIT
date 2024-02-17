@@ -17,5 +17,6 @@ urlpatterns = [
     path('otherProfile', views.otherProfile, name='otherProfile'),
     path('otherLikedPosts', views.otherLikedPosts, name='otherLikedPosts'),
     path('replies', views.replies, name="replies"),
-    path('userProfile', views.followChange, name="followChange")
+    path('userProfile', views.followChange, name="followChange"),
+    path('followedPosts', views.FollowedPosts, name="followedPosts")
 ]
