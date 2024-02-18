@@ -493,7 +493,7 @@ def otherProfile(request):
     else:
         blocked = False
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked, "currentUser":currentUser})
     
 
 @login_required(login_url='login')    
@@ -547,7 +547,7 @@ def followChange(request):
     
 
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked, "currentUser":currentUser})
     
     
 @login_required(login_url='login')   

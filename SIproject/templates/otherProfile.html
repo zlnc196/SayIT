@@ -4,35 +4,53 @@
 
 {% block content %}
 
+<form method='post' action='homepage'>
+
+    {% csrf_token %}
+
+    <button type='submit'> Return to home </button>
+    <input type = "hidden" id="likeProcess" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
+
+</form>
+
 <img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'> 
 <h1> @{{otherUser.username}}'s profile </h1>
 
-<form method="post" action="blockUser">
-    {% csrf_token %}
-    <input type='hidden' id='otherUser' name='otherUser' value='{{otherUser.id}}'>
-    {% if blocked == False %}
-        <button> Block User </button>
-    {% else %}
-        <button> Unblock User </button>
-    {% endif %}
 
-</form>
+{% if otherUser.id != currentUser.id %}
+
+    <form method="post" action="blockUser">
+        {% csrf_token %}
+        <input type='hidden' id='otherUser' name='otherUser' value='{{otherUser.id}}'>
+        {% if blocked == False %}
+            <button> Block User </button>
+        {% else %}
+            <button> Unblock User </button>
+        {% endif %}
+
+    </form>
+
+{% endif %}
 
 
 
 <h2> Followers = {{otherUser.followers}} </h2>
 
-{% if blocked == False %}
+{% if blocked == False%}
 
-    <form method="post" action="userProfile">
-        {% csrf_token %}
-        <input type='hidden' id='otherUser' name='otherUser' value='{{otherUser.id}}'>
-        {%if followed == True%}
-        <button> Unfollow </button>
-        {% else %}
-        <button> Follow </button>
-        {% endif %}
-    </form>
+    {% if otherUser.id != currentUser.id %}
+
+        <form method="post" action="userProfile">
+            {% csrf_token %}
+            <input type='hidden' id='otherUser' name='otherUser' value='{{otherUser.id}}'>
+            {%if followed == True%}
+            <button> Unfollow </button>
+            {% else %}
+            <button> Follow </button>
+            {% endif %}
+        </form>
+    {% endif %}
 
 
 
@@ -41,15 +59,7 @@
     <p> {{otherUser.bio}} </p>
 
 
-    <form method='post' action='homepage'>
-
-        {% csrf_token %}
-
-        <button type='submit'> Return to home </button>
-        <input type = "hidden" id="likeProcess" name='likeProcess'>
-        <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
-
-    </form>
+    
 
     <script> 
         const likeSession = [];
