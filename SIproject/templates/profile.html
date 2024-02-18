@@ -16,14 +16,14 @@
 <form method='post' action='editProfile'>
     {% csrf_token %}
 
-    <button type='submit' class="btn btn-outline-secondary">Edit Profile </button>
+    <button type='submit' class="btn btn-outline-secondary">Edit Profile </button> <br>
 </form>
 
 <form method='post' action='homepage'>
 
     {% csrf_token %}
 
-    <button type='submit' class="btn btn-outline-secondary"> Return to home </button>
+    <button type='submit' class="btn btn-outline-secondary"> Return to home </button> <br>
     <input type = "hidden" id="likeProcess" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
 
@@ -43,10 +43,10 @@
 
     {% csrf_token %}
 
-    <button type='submit' class="btn btn-outline-secondary"> Liked posts </button>
+    <button type='submit' class="btn btn-outline-secondary"> Liked posts </button> 
     
 
-</form>
+</form> 
 
 
 
