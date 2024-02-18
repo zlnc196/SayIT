@@ -19,14 +19,14 @@
     <form method='post' action='homepage'>
 
         {% csrf_token %}
-
-    
-        <label for='lusername' > Username </label> <br> 
-        <input type='text' name='lusername' class='rtextbox'> <br>
-        <label for='lpassword' > Password </label> <br>
-        <input type='password' name='lpassword' class='rtextbox'> <br> <br>
+        <input type='text' name='lusername' class='rtextbox' placeholder="Username"> <br>
+      
+        <input type='password' name='lpassword' class='rtextbox' placeholder="Password"> <br> 
         
-        <button type='submit' class='subbutton'> Login </button>
+        
+        <button type='submit' class='subbutton btn btn-primary'> Login </button> <br>
+
+        <p class="smallText "> Don't have an account ? <a href="register"> Register</a> </p>
     
     </form>
     

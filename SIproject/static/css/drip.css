@@ -55,12 +55,12 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgb(25, 25, 25);
+    background-color: rgb(255, 255, 255);
     padding: 30px;
-    border-radius: 30px;
     font-size: 50px;
-    font-family: 'Courier New', Courier, monospace;
-    color: white
+    font-family: 'Roboto', sans-serif;
+    color: black;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.8); 
     
 
 }
@@ -69,6 +69,7 @@ body {
     width: 300px;
     height: 50px;
     font-size: 20px;
+    border-width: 1px;
 
 }
 
@@ -154,9 +155,10 @@ body {
 
 .postsButton {
     background-color: white;
-    border: none;
     width: 75%;
-    text-align: left
+    text-align: left;
+    border-width: 1px;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.8); 
 }
 
 .hide {
@@ -219,4 +221,17 @@ body {
     left: 50%;
     transform: translate(-50%);
 
+}
+
+.smallText {
+    font-size: x-small;
+}
+
+#rememberId {
+    font-size: 20px;
+
+}
+
+.postsButton:hover {
+    background-color: #9a9a9a; /* Set the background color on hover */
 }

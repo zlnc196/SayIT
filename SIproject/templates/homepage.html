@@ -4,14 +4,10 @@
 
 {% block content %}
 
-<form method='post' action='profile' enctype="multipart/form-data">
-    {%csrf_token%}
-    <textarea class='poster' rows="10" cols="30" name='post' placeholder='Whats on your mind?'></textarea>
-    <input type="file" name="image" accept="image/*">
-    <button type='submit' id='spost'> Post </button>
-    <input type="hidden" name="replyCheck" value="False">
 
-
+<form method="post" action="intro">
+    {% csrf_token %}
+    <button> Logout </button>
 
 </form>
 
@@ -20,22 +16,22 @@
 <div class='buttongroup'>
     <form method='post' action='profile'>
         {% csrf_token %}
-        <button type='submit' class = 'topbuttons btn btn-outline-primary'> Your profile </button>
+        <button type='submit' class = 'topbuttons btn btn-primary'> Your profile </button>
     </form>
 
 
     <form method='post' action='AllPosts'>
         {% csrf_token %}
-        <button type='submit' class = 'topbuttons btn btn-outline-primary'> Most popular posts  </button>
+        <button type='submit' class = 'topbuttons btn btn-primary'> Most popular posts  </button>
     </form>
 
 
 
     <form method='post' action='followedPosts'>
         {% csrf_token %}
-        <button type='submit' class = 'topbuttons btn btn-outline-primary'> Posts from followed accounts </button>
+        <button type='submit' class = 'topbuttons btn btn-primary'> Posts from followed accounts </button>
     </form>
-    <div class='searchSection '>
+    <div class='searchSection'>
         <form method='post' action='search'>
             {% csrf_token %}
                 <input for='text' placeholder='search' class='searcher form-control' oninput="updateSearchButtons()" name='searchedFor'>
@@ -47,10 +43,23 @@
 </div>
 
 
-<form method="post" action="intro">
-    {% csrf_token %}
-    <button> Logout </button>
 
+
+<form method='post' action='profile' enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="form-floating col-md-6">
+            <textarea class='form-control' rows="4" name='post' id="postbox" style="font-size:40px; width: 600px; height: 250px;" placeholder='Whats on your mind?'></textarea>
+            <label for="postbox">Whats on your mind?</label>
+        </div>
+    </div>
+    
+    <input type="file" name="image" accept="image/*">
+    
+    <button type='submit' id='spost' class="btn btn-primary">Post</button>
+    
+    <input type="hidden" name="replyCheck" value="False">
 </form>
 
 <script>

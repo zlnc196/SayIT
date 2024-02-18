@@ -14,8 +14,16 @@
 
 </form>
 
-<img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'> 
-<h1> @{{otherUser.username}}'s profile </h1>
+<div class="container-fluid p-5 bg-primary text-white text-center">
+
+    <img src="{{otherUser.profilePicture.url}}" width="200" height="200" class='largePfp'>
+    <h1> @{{otherUser.username}}'s profile </h1>
+
+    <p> {{otherUser.bio}} </p>
+
+    <h2>{{otherUser.followers}} followers </h2>
+
+</div>
 
 
 {% if otherUser.id != currentUser.id %}
@@ -35,7 +43,7 @@
 
 
 
-<h2> Followers = {{otherUser.followers}} </h2>
+
 
 {% if blocked == False%}
 
@@ -53,10 +61,6 @@
     {% endif %}
 
 
-
-
-
-    <p> {{otherUser.bio}} </p>
 
 
     
@@ -86,23 +90,27 @@
         {% csrf_token %}
 
         <input type="hidden" id="selectedPost" name="selectedPost">
+        <input type = "hidden" id="likeProcess2" name='likeProcess'>
+        <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
 
 
         {% for objs in otherUsersPosts %}
             
+        <div class="d-flex justify-content-center align-items-center">
+        
             <button class='postsButton' onclick="getPost({{objs.id}})">
                 
                 <div class='user-info'>
-
+    
                     {% for user in allUsers%}
                         {% if user.username == objs.user.username %}
                             <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
                         {% endif %}
                     {% endfor %}
-
+    
             
-                    <h3 class='pname'>{{objs.user.username}} </h3>
-
+                    <h3 class='pname'>@{{objs.user.username}}</h3>
+    
                 </div>
                 
                 <p class='ppost'> {{objs.post}} </p>
@@ -111,25 +119,34 @@
                 {% endif %}
                 <p class='pdate'> {{objs.date}} </p>
                 <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-                <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-            
                 
+    
             </button>
-
+    
+            <div>
+    
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+    
+               
+    
+            </div>
+    
+        </div>
+    
             <br>
             <br>
             
             <script>
-
+    
                 objID = "{{objs.id}}";
                 if (likedList.includes(objID)) {
                     document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
                     console.log("yuh");
                 }
-
+    
             </script>
-
-
+    
+    
         {% endfor %}
     </form>
 
@@ -148,6 +165,7 @@
                 document.getElementById("Lpost"+id).innerHTML = "Like Post";
                 unlikeSession.push(id);
                 document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+                document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
                 if (likeSession.includes(id)) {
                     likeSession.splice(unlikeSession.indexOf(id), 1);
                 }
@@ -159,6 +177,7 @@
                 document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
                 likeSession.push(id);
                 document.getElementById('likeProcess').value = likeSession.join("-");
+                document.getElementById('likeProcess2').value = likeSession.join("-");
                 if (unlikeSession.includes(id)) {
                     unlikeSession.splice(unlikeSession.indexOf(id), 1);
                 }

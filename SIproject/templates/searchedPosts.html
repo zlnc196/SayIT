@@ -4,13 +4,16 @@
 
 {% block content %}
 
-<h1> Posts based on your search </h1>
+
+<div class="container-fluid p-5 bg-primary text-white text-center">
+<h1> Posts based on search </h1>
+</div>
 
 <form method='post' action='homepage'>
 
     {% csrf_token %}
 
-    <button type='submit'> Return to home </button>
+    <button type='submit'> Return to home </button> <br> <br>
     <input type = "hidden" id="likeProcess" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
 
@@ -37,32 +40,37 @@
 
 
     {% for objs in selectedPosts %}
-        
-        <button class='postsButton' onclick="getPost({{objs.id}})">
-            
-            <div class='user-info'>
 
-                {% for user in allUsers%}
-                    {% if user.username == objs.user.username %}
-                        <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
-                    {% endif %}
-                {% endfor %}
-
-        
-                <h3 class='pname'>{{objs.user.username}} </h3>
-
-            </div>
+        <div class="d-flex justify-content-center align-items-center">
             
-            <p class='ppost'> {{objs.post}} </p>
-            {% if objs.img != "False" %}
-                <img src="{{objs.img.url}}" width="200" height="200">
-            {% endif %}
-            <p class='pdate'> {{objs.date}} </p>
-            <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-            <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-        
             
-        </button>
+            <button class='postsButton' onclick="getPost({{objs.id}})">
+                
+                <div class='user-info'>
+
+                    {% for user in allUsers%}
+                        {% if user.username == objs.user.username %}
+                            <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                        {% endif %}
+                    {% endfor %}
+
+            
+                    <h3 class='pname'>{{objs.user.username}} </h3>
+
+                </div>
+                
+                <p class='ppost'> {{objs.post}} </p>
+                {% if objs.img != "False" %}
+                    <img src="{{objs.img.url}}" width="200" height="200">
+                {% endif %}
+                <p class='pdate'> {{objs.date}} </p>
+                <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+            
+                
+            </button>
+
+        </div> 
 
         <br>
         <br>
@@ -76,6 +84,9 @@
             }
 
         </script>
+
+        
+            
 
 
     {% endfor %}

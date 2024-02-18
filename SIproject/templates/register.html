@@ -8,15 +8,11 @@
     {% endif %}
 <form method='post' action='confirm'>
     {% csrf_token %}
-    <label for='Email' > Email </label> <br> 
-    <input type='email' name='Email' class='rtextbox'> <br>
-
-
-    <label for='username' > Username </label> <br> 
-    <input type='text' name='username' class='rtextbox'> <br>
-    <label for='password' > Password </label> <br>
-    <input type='password' name='password' class='rtextbox'> <br>
-    <label for='password' class='chec'> *Must be above 8 characters and contain a number and a letter </label> <br> <br>
+    
+    <input type='email' name='Email' class='rtextbox' placeholder="Email"> <br>
+    <input type='text' name='username' class='rtextbox' placeholder="Username"> <br>
+    <input type='password' name='password' class='rtextbox' placeholder="Password"> <br>
+    <label for='password' class='chec'> *Must be above 8 characters and contain a number and a letter </label>
     
     
     <div class='chec'>
@@ -24,8 +20,9 @@
     <label for='checkbox' > I will comply to all the rule in the terms of service which can be found in <a href='https://bills.parliament.uk/bills/3137'> Terms of service </a> </label> <br> <br>
     </div>
 
-    <button type='submit' class='subbutton'> Register </button>
+    <button type='submit' class='subbutton btn btn-primary'> Register </button>
 
+    <p class="smallText "> Already have an account? <a href="login">Login</a> </p>
 </form>
 
 </div>

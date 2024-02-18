@@ -4,22 +4,26 @@
 
 {% block content %}
 
-<img src="{{CurrentUser.profilePicture.url}}" width="200" height="200" class='largePfp'>
-<h1> @{{cuser}}'s profile </h1>
+<div class="container-fluid p-5 bg-primary text-white text-center">
 
-<p> {{CurrentUser.bio}} </p>
+    <img src="{{CurrentUser.profilePicture.url}}" width="200" height="200" class='largePfp'>
+    <h1> @{{cuser}}'s profile </h1>
+
+    <p> {{CurrentUser.bio}} </p>
+
+</div>
 
 <form method='post' action='editProfile'>
     {% csrf_token %}
 
-    <button type='submit'>Edit Profile </button>
+    <button type='submit' class="btn btn-outline-secondary">Edit Profile </button>
 </form>
 
 <form method='post' action='homepage'>
 
     {% csrf_token %}
 
-    <button type='submit'> Return to home </button>
+    <button type='submit' class="btn btn-outline-secondary"> Return to home </button>
     <input type = "hidden" id="likeProcess" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
 
@@ -39,7 +43,7 @@
 
     {% csrf_token %}
 
-    <button type='submit'> Liked posts </button>
+    <button type='submit' class="btn btn-outline-secondary"> Liked posts </button>
     
 
 </form>
@@ -57,7 +61,7 @@
 
     {% for objs in uposts %}
 
-    <div>
+    <div class="d-flex justify-content-center align-items-center">
         
         <button class='postsButton' onclick="getPost({{objs.id}})">
             
@@ -80,20 +84,26 @@
             {% endif %}
             <p class='pdate'> {{objs.date}} </p>
             <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-            <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+            
 
         </button>
 
-        <form method='post' action="dprofile">
+        <div>
 
-            {% csrf_token %}
-        
-            <button type='submit'> Delete post </button>
+            <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
 
-            <input type="hidden" name="delpost" value="{{objs.id}}">
+            <form method='post' action="dprofile">
+
+                {% csrf_token %}
             
-        
-        </form>
+                <button type='submit'> Delete post </button>
+
+                <input type="hidden" name="delpost" value="{{objs.id}}">
+                
+            
+            </form>
+
+        </div>
 
     </div>
 

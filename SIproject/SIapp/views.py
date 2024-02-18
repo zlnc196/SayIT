@@ -478,7 +478,7 @@ def otherProfile(request):
     
     likedList = otherUser.liked_posts
     likedList = "-".join(likedList)
-    
+    allUsers = get_user_model().objects.all()
     currentUser = request.user
     otherUser = get_user_model().objects.get(id=otherUserId)
     blockList = currentUser.blockList
@@ -493,7 +493,7 @@ def otherProfile(request):
     else:
         blocked = False
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked, "currentUser":currentUser})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked, "currentUser":currentUser, "allUsers":allUsers})
     
 
 @login_required(login_url='login')    
@@ -521,6 +521,8 @@ def followChange(request):
     else:
         print("Error")
         
+    allUsers = get_user_model().objects.all()
+        
     currentUser.save()
     otherUser.save()
         
@@ -547,7 +549,7 @@ def followChange(request):
     
 
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked, "currentUser":currentUser})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked, "currentUser":currentUser, "allUsers":allUsers})
     
     
 @login_required(login_url='login')   
@@ -704,8 +706,11 @@ def blockUser(request):
         blocked = True
     else:
         blocked = False
+        
+        
+    allUsers = get_user_model().objects.all()
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList,"blocked":blocked, "followed":followed, "currentUser": currentUser})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList,"blocked":blocked, "followed":followed, "currentUser": currentUser, "allUsers": allUsers})
     
 
 
