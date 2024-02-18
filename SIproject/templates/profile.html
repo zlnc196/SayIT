@@ -44,6 +44,8 @@
 
 </form>
 
+
+
 <form method="post" action="replies">
 
     {% csrf_token %}
@@ -80,8 +82,18 @@
             <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
             <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
 
-            
         </button>
+
+        <form method='post' action="dprofile">
+
+            {% csrf_token %}
+        
+            <button type='submit'> Delete post </button>
+
+            <input type="hidden" name="delpost" value="{{objs.id}}">
+            
+        
+        </form>
 
     </div>
 
