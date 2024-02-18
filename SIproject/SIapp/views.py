@@ -15,6 +15,88 @@ from django.views.decorators.csrf import csrf_protect
 
 loginValid = False
 
+def handleLikes(request):
+    currentUser = request.user.username
+    #try:
+    likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
+    unlikeProcess = request.POST["unlikeProcess"] 
+    print(likeProcess)          # Just for testing
+    print(unlikeProcess)
+    likeArray = []
+    unlikeArray = []
+    word=""
+    for char in likeProcess:                               #Quick algorithm to convert it back into a list
+        
+        if char == "-":
+            likeArray.append(word)
+            word=""
+        else:
+            word=word+char
+    likeArray.append(word)
+    likeArray = list(dict.fromkeys(likeArray))
+    print(likeArray)
+    
+    unword=""
+    for char in unlikeProcess:                               #Quick algorithm to convert it back into a list
+        
+        if char == "-":
+            unlikeArray.append(unword)
+            unword=""
+        else:
+            unword=unword+char
+    unlikeArray.append(unword)
+    unlikeArray = list(dict.fromkeys(unlikeArray))
+    print(unlikeArray)
+    
+    
+    for elem in likeArray:
+        idholder = request.user
+        
+        print("here we go-adding")
+        try:
+            testHolder = int(elem)
+            canAdd = True
+        except:
+            canAdd = False
+        
+        if canAdd == True:
+            if elem in idholder.liked_posts:
+                print("already post already liked")
+            else:
+                idholder.liked_posts.append(elem)
+                lidholder = Posts.objects.get(id = int(elem))
+                lidholder.likes = lidholder.likes+1
+                print(elem, "has been added")
+                idholder.save()
+                lidholder.save()
+    
+    
+    for elem in unlikeArray:
+        idholder = request.user
+        print("here we go-deleting")
+        try:
+            testHolder = int(elem)
+            canRemove = True
+        except:
+            canRemove = False
+            
+        if canRemove == True:
+            if elem in idholder.liked_posts:
+                idholder.liked_posts.remove(elem)
+                lidholder = Posts.objects.get(id = int(elem))
+                lidholder.likes = lidholder.likes-1
+                print(elem, "has been Removed")
+                idholder.save()
+                lidholder.save()
+            else:
+                print("Not even liked, cant be removed")
+            
+    for elem in idholder.liked_posts:
+        print(elem)
+        
+    #except:
+        #print("nuttin to worry about")
+
 def intro(request):
     print(request.user.username)
     logout(request)
@@ -437,15 +519,102 @@ def otherLikedPosts(request):
 @login_required(login_url='login')    
 def replies(request):
     
+    
+    
+    try:
+        likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
+        unlikeProcess = request.POST["unlikeProcess"] 
+        print(likeProcess)          # Just for testing
+        print(unlikeProcess)
+        likeArray = []
+        unlikeArray = []
+        word=""
+        for char in likeProcess:                               #Quick algorithm to convert it back into a list
+            
+            if char == "-":
+                likeArray.append(word)
+                word=""
+            else:
+                word=word+char
+        likeArray.append(word)
+        likeArray = list(dict.fromkeys(likeArray))
+        print(likeArray)
+        
+        unword=""
+        for char in unlikeProcess:                               #Quick algorithm to convert it back into a list
+            
+            if char == "-":
+                unlikeArray.append(unword)
+                unword=""
+            else:
+                unword=unword+char
+        unlikeArray.append(unword)
+        unlikeArray = list(dict.fromkeys(unlikeArray))
+        print(unlikeArray)
+        
+        
+        for elem in likeArray:
+            idholder = request.user
+            
+            print("here we go-adding")
+            try:
+                testHolder = int(elem)
+                canAdd = True
+            except:
+                canAdd = False
+            
+            if canAdd == True:
+                if elem in idholder.liked_posts:
+                    print("already post already liked")
+                else:
+                    idholder.liked_posts.append(elem)
+                    lidholder = Posts.objects.get(id = int(elem))
+                    lidholder.likes = lidholder.likes+1
+                    print(elem, "has been added")
+                    idholder.save()
+                    lidholder.save()
+        
+        
+        for elem in unlikeArray:
+            idholder = request.user
+            print("here we go-deleting")
+            try:
+                testHolder = int(elem)
+                canRemove = True
+            except:
+                canRemove = False
+                
+            if canRemove == True:
+                if elem in idholder.liked_posts:
+                    idholder.liked_posts.remove(elem)
+                    lidholder = Posts.objects.get(id = int(elem))
+                    lidholder.likes = lidholder.likes-1
+                    print(elem, "has been Removed")
+                    idholder.save()
+                    lidholder.save()
+                else:
+                    print("Not even liked, cant be removed")
+                
+        for elem in idholder.liked_posts:
+            print(elem)
+        
+    except:
+        print("nuttin to worry about")
+        
+        
     postId = request.POST["selectedPost"]
     
     selectedPost = Posts.objects.get(id=postId)
     currentUser = request.user
-    likedList = currentUser.liked_posts
-    likedList = "-".join(likedList)
+    
     repliedList = selectedPost.replies
     repliedPosts = Posts.objects.filter(id__in=repliedList)
     allUsers = get_user_model().objects.all()
+        
+    likedList = idholder.liked_posts
+    likedList = "-".join(likedList)
+    
+    print(likedList)
     
     return render(request, "replies.html", {"post": selectedPost, "likedList":likedList, "repliedPosts": repliedPosts, 'allUsers': allUsers})
 

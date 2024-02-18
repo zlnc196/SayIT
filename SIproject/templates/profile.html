@@ -49,6 +49,8 @@
     {% csrf_token %}
 
     <input type="hidden" id="selectedPost" name="selectedPost">
+    <input type = "hidden" id="likeProcess2" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
 
 
     {% for objs in uposts %}
@@ -77,7 +79,7 @@
             <p class='pdate'> {{objs.date}} </p>
             <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
             <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-        
+
             
         </button>
 
@@ -115,6 +117,7 @@
             document.getElementById("Lpost"+id).innerHTML = "Like Post";
             unlikeSession.push(id);
             document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+            document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
             if (likeSession.includes(id)) {
                 likeSession.splice(unlikeSession.indexOf(id), 1);
             }
@@ -126,6 +129,7 @@
             document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
             likeSession.push(id);
             document.getElementById('likeProcess').value = likeSession.join("-");
+            document.getElementById('likeProcess2').value = likeSession.join("-");
             if (unlikeSession.includes(id)) {
                 unlikeSession.splice(unlikeSession.indexOf(id), 1);
             }
