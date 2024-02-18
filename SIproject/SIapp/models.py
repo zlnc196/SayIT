@@ -21,6 +21,7 @@ class CustomUser(AbstractUser):
     bio = models.CharField(max_length=100, default = "user has no bio")
     followers = models.IntegerField(default=0)
     followedUsers = ArrayField(models.CharField(max_length=100, default=[]))
+    blockList = ArrayField(models.CharField(max_length=100, default=[]))
     def __str__(self):
         return self.username
     groups = None

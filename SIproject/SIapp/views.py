@@ -132,7 +132,7 @@ def confirm(request):
 
             
     if valid == True:
-        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = timezone.now() ,first_name = 'Dont', last_name = 'Worry', liked_posts=[], followedUsers = []) #blockList=[], userReportedList=[] )
+        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = timezone.now() ,first_name = 'Dont', last_name = 'Worry', liked_posts=[], followedUsers = [], blockList=[]) #blockList=[], userReportedList=[] )
         user.save()
         return redirect("login")
     
@@ -480,13 +480,20 @@ def otherProfile(request):
     likedList = "-".join(likedList)
     
     currentUser = request.user
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    blockList = currentUser.blockList
     followList = currentUser.followedUsers
     if otherUserId in followList:
         followed = True
     else:
         followed = False
+        
+    if otherUserId in blockList:
+        blocked = True
+    else:
+        blocked = False
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked})
     
 
 @login_required(login_url='login')    
@@ -513,6 +520,26 @@ def followChange(request):
         followed = True
     else:
         print("Error")
+        
+    currentUser.save()
+    otherUser.save()
+        
+        
+    likedList = otherUser.liked_posts
+    likedList = "-".join(likedList)
+    currentUser = request.user
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    blockList = currentUser.blockList
+    followList = currentUser.followedUsers
+    if otherUserId in followList:
+        followed = True
+    else:
+        followed = False
+        
+    if otherUserId in blockList:
+        blocked = True
+    else:
+        blocked = False
       
       
     currentUser.save()
@@ -520,7 +547,7 @@ def followChange(request):
     
 
     
-    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed})
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed, "blocked":blocked})
     
     
 @login_required(login_url='login')   
@@ -630,7 +657,6 @@ def replies(request):
     repliedList = selectedPost.replies
     repliedPosts = Posts.objects.filter(id__in=repliedList)
     allUsers = get_user_model().objects.all()
-        
     likedList = idholder.liked_posts
     likedList = "-".join(likedList)
     
@@ -639,14 +665,47 @@ def replies(request):
     return render(request, "replies.html", {"post": selectedPost, "likedList":likedList, "repliedPosts": repliedPosts, 'allUsers': allUsers})
 
 
-#def blockUser(request):
-    blockedID = request.POST["blockedID"] 
+def blockUser(request):
+    blockedID = request.POST["otherUser"] 
     currentUser = request.user
-    
+    otherUser = get_user_model().objects.get(id=blockedID)
+    followList = otherUser.followedUsers
     if blockedID in currentUser.blockList:
         currentUser.blockList.remove(blockedID)
     else:
         currentUser.blockList.append(blockedID)
+        if blockedID in currentUser.followedUsers:
+            currentUser.followedUsers.remove(blockedID)
+            otherUser.followers -= 1
+            print("Just unfollowed")
+            followed = False
+        
+    currentUser.save()
+    otherUser.save()
+        
+    otherUserId = request.POST['otherUser']
+    print(f'other user id is {otherUserId}')
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    otherUsersPosts = Posts.objects.filter(user=otherUser).order_by("-date_created")
+    
+    
+    likedList = otherUser.liked_posts
+    likedList = "-".join(likedList)
+    currentUser = request.user
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    blockList = currentUser.blockList
+    followList = currentUser.followedUsers
+    if otherUserId in followList:
+        followed = True
+    else:
+        followed = False
+        
+    if otherUserId in blockList:
+        blocked = True
+    else:
+        blocked = False
+    
+    return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList,"blocked":blocked, "followed":followed, "currentUser": currentUser})
     
 
     
