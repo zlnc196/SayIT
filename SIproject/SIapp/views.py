@@ -7,6 +7,10 @@ import datetime
 from django.contrib.auth import get_user_model, authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
+from django.db.models import F, ExpressionWrapper, fields
+from django.db.models.functions import Now, Extract
+from django.utils import timezone
+
 
 
 
@@ -128,7 +132,7 @@ def confirm(request):
 
             
     if valid == True:
-        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = '2022-01-19 14:30:45.123456-05:00' ,first_name = 'Dont', last_name = 'Worry', liked_posts=[])
+        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = timezone.now() ,first_name = 'Dont', last_name = 'Worry', liked_posts=[], followedUsers = []) #blockList=[], userReportedList=[] )
         user.save()
         return redirect("login")
     
@@ -369,8 +373,24 @@ def AllPosts(request):
     likedList = "-".join(likedList)
     print(likedList)
     
+    blocked = request.user.blockList
     
-    allPosts = Posts.objects.all().order_by('-date_created')
+    
+    allPosts = Posts.objects.exclude(id__in=blocked).annotate(
+    days_since_created=ExpressionWrapper(
+        Extract(Now() - F('date_created'), 'days'),
+        output_field=fields.IntegerField()
+    )
+).annotate(
+    likes_per_day=ExpressionWrapper(
+        F('likes') / (F('days_since_created') + 1),  # Add 1 to avoid division by zero
+        output_field=fields.FloatField()
+    )
+).order_by('-likes_per_day')
+    
+    
+    
+
   
     return render(request,'AllPosts.html', {'allPosts':allPosts, 'cusers': cusers, "likedList": likedList, 'allUsers': allUsers })
 
@@ -619,6 +639,15 @@ def replies(request):
     return render(request, "replies.html", {"post": selectedPost, "likedList":likedList, "repliedPosts": repliedPosts, 'allUsers': allUsers})
 
 
+#def blockUser(request):
+    blockedID = request.POST["blockedID"] 
+    currentUser = request.user
+    
+    if blockedID in currentUser.blockList:
+        currentUser.blockList.remove(blockedID)
+    else:
+        currentUser.blockList.append(blockedID)
+    
 
     
     
