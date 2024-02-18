@@ -376,7 +376,7 @@ def AllPosts(request):
     blocked = request.user.blockList
     
     
-    allPosts = Posts.objects.exclude(id__in=blocked).annotate(
+    allPosts = Posts.objects.exclude(user_id__in=blocked).annotate(
     days_since_created=ExpressionWrapper(
         Extract(Now() - F('date_created'), 'days'),
         output_field=fields.IntegerField()
@@ -707,6 +707,8 @@ def blockUser(request):
     
     return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList,"blocked":blocked, "followed":followed, "currentUser": currentUser})
     
+
+
 
     
     
