@@ -20,25 +20,25 @@
 <div class='buttongroup'>
     <form method='post' action='profile'>
         {% csrf_token %}
-        <button type='submit' class = 'topbuttons'> Your profile </button>
+        <button type='submit' class = 'topbuttons btn btn-outline-primary'> Your profile </button>
     </form>
 
 
     <form method='post' action='AllPosts'>
         {% csrf_token %}
-        <button type='submit' class = 'topbuttons'> Most popular posts  </button>
+        <button type='submit' class = 'topbuttons btn btn-outline-primary'> Most popular posts  </button>
     </form>
 
 
 
     <form method='post' action='followedPosts'>
         {% csrf_token %}
-        <button type='submit' class = 'topbuttons'> Posts from followed accounts </button>
+        <button type='submit' class = 'topbuttons btn btn-outline-primary'> Posts from followed accounts </button>
     </form>
-    <div class='searchSection'>
+    <div class='searchSection '>
         <form method='post' action='search'>
             {% csrf_token %}
-                <input for='text' placeholder='search' class='searcher' oninput="updateSearchButtons()" name='searchedFor'>
+                <input for='text' placeholder='search' class='searcher form-control' oninput="updateSearchButtons()" name='searchedFor'>
                 <button id="searchPost" type ='submit' onclick="postOrUser('post')"></button>
                 <button id="searchUser" type='submit' onclick="postOrUser('user')"></button>
                 <input type = "hidden" id="userOrPost" name='userOrPost'>

@@ -15,21 +15,26 @@
 
     <input type='hidden' id='otherUser' name='otherUser'>
 
-    {% for objs in selectedUsers %}
 
-    <button class="userDisplayBlock user-info posts" type='submit' onclick="oname('{{objs.id}}')">
+    <div class="container">
+        <div class="row">
 
-    
-        <img src="{{objs.profilePicture.url }}" width='150' height='150' class='largePfp'>
-        <div>
-            <h2> @{{objs.username}} </h2>
-            <p> {{objs.bio}} </p>
+            {% for objs in selectedUsers %}
+                <div class="col-md-6">
+                    <div class="container mt-3">
+                        <div class="card" style="width:400px">
+                            <img class="card-img-top" src="{{objs.profilePicture.url }}" alt="Card image" style="width:100%">
+                            <div class="card-body">
+                                <h4 class="card-title">@{{objs.username}}</h4>
+                                <p class="card-text">{{objs.bio}}</p>
+                                <button type='submit' onclick="oname('{{objs.id}}')" class="btn btn-primary">See Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        
-
-    </button>
-
-    {% endfor %}
+    </div>
 
 </form>
 

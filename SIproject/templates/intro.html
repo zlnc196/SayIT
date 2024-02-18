@@ -5,23 +5,50 @@
 
 {% block content %}
 
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'images/logo2.png' %}" alt="Avatar Logo" style="width:40px;" class="rounded-pill"> 
+      </a>
+      <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link active" href="login">Log in</a>
+      </li>
+     <li class="nav-item">
+        <a class="nav-link active" href="register">Sign Up</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="#">More info</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Donations</a>
+      </li>
+    </ul>
+    </div>
+  </nav>
+  
+
 <div class='intropage' >
 
-<h1> Entertainment or information, SayIT has it all </h1>
+
+
+<h1 class="text-center"> <strong> Speak your mind. <strong> </h1>
+<h3 class="text-center"> Entertainment or information, SayIT has it all </h3>
 
 
 
-<img src='{% static 'images/logo.png' %}'>
+<!--<img src='{% static 'images/logo.png' %}'>-->
 
 <div class='buttongroup'>
 
 <form action='register'>
-    <button type='submit' class='homebuttons'> Register </button>
+    <button type='submit' class='homebuttons btn btn-secondary'> Register </button>
 
 </form>
 
 <form action='login'>
-    <button type='submit' class='homebuttons'> Login </button>
+    <button type='submit' class='homebuttons btn btn-secondary'> Login </button>
     
 
 </form>
