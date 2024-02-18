@@ -5,6 +5,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import datetime
 from django.contrib.auth import get_user_model, authenticate, login as auth_login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+
+
 
 # Create your views here.
 
@@ -19,7 +23,11 @@ def intro(request):
 def register(request):
     return render(request, 'register.html')
 
+@csrf_protect
 def login(request):
+    if request.user.is_authenticated:
+        logout(request)
+    
     return render(request, 'login.html')
 
 
@@ -53,7 +61,7 @@ def confirm(request):
     
     return render(request, 'register.html', {'Valid': valid})
 
-
+@csrf_protect
 def homepage(request):
     UserData = get_user_model().objects.all()
     idholder = 0
@@ -171,8 +179,12 @@ def homepage(request):
             
     return render(request, route, {'cuser':currentUser, 'lValid': loginValid, 'cid': idholder})
 
+            
+        
+    
 
-
+ 
+@login_required(login_url='login')
 def profile(request):
     cusers = request.user
     currentUser = request.user.username
@@ -241,7 +253,7 @@ def profile(request):
     return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers, 'allUsers': allUsers  })
 
 
-
+@login_required(login_url='login')
 def dprofile(request):
     currentUser = request.user.username
     cusers = request.user
@@ -309,12 +321,14 @@ def LikedPosts(request):
     
     return render(request, 'liked.html', {"likedPosts": likedPosts, "cuser": currentUser, 'allUsers': allUsers })
 
-
+@login_required(login_url='login')
 def editProfile(request):
     cusers = request.user
     
     return render(request, 'editProfile.html', {"CurrentUser":cusers})
 
+
+@login_required(login_url='login')
 def changedProfile(request):
     newBio = request.POST['newBio']
     try:
@@ -329,6 +343,8 @@ def changedProfile(request):
     usersPosts = Posts.objects.filter(user=cusers.id)
     return render(request, 'profile.html', {'cuser':currentUser, 'uposts':usersPosts, 'CurrentUser':cusers})
 
+
+@login_required(login_url='login')
 def search(request):
     UorP = request.POST['userOrPost']
     searchedFor = request.POST['searchedFor']
@@ -349,6 +365,8 @@ def search(request):
     
     return render(request, route, returnDict)
 
+
+@login_required(login_url='login')
 def otherProfile(request):
     otherUserId = request.POST['otherUser']
     print(f'other user id is {otherUserId}')
@@ -368,7 +386,8 @@ def otherProfile(request):
     
     return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed})
     
-    
+
+@login_required(login_url='login')    
 def followChange(request):
     otherUserId = request.POST['otherUser']
     print(f'other user id is {otherUserId}')
@@ -402,7 +421,7 @@ def followChange(request):
     return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList, "followed":followed})
     
     
-    
+@login_required(login_url='login')   
 def otherLikedPosts(request):
     otherUserId = request.POST['otherUser2']
     print(f'other user id is {otherUserId}')
@@ -415,7 +434,7 @@ def otherLikedPosts(request):
     
     return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers, "currentUser": currentUser })    
     
-    
+@login_required(login_url='login')    
 def replies(request):
     
     postId = request.POST["selectedPost"]

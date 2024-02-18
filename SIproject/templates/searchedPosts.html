@@ -1,12 +1,10 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 
-{% load static%}
+{% load static %}
 
-{% block content%}
+{% block content %}
 
 <h1> Posts based on your search </h1>
-
-<h1> Most popular posts </h1>
 
 <form method='post' action='homepage'>
 
@@ -27,76 +25,112 @@
 
 </script>
 
-{% for objs in selectedPosts %}
 
-    <div class='posts'>
+
+<form method="post" action="replies">
+
+    {% csrf_token %}
+
+    <input type="hidden" id="selectedPost" name="selectedPost">
+
+
+    {% for objs in selectedPosts %}
         
-        <div class='user-info'>
+        <button class='postsButton' onclick="getPost({{objs.id}})">
+            
+            <div class='user-info'>
 
-            {% for user in allUsers%}
-                {% if user.username == objs.user.username %}
-                    <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
-                {% endif %}
-            {% endfor %}
+                {% for user in allUsers%}
+                    {% if user.username == objs.user.username %}
+                        <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                    {% endif %}
+                {% endfor %}
 
-       
-            <h3 class='pname'>{{objs.user.username}} </h3>
-
-        </div>
         
-        <p class='ppost'> {{objs.post}} </p>
-        {% if objs.img != "False" %}
-            <img src="{{objs.img.url}}" width="200" height="200">
-        {% endif %}
-        <p class='pdate'> {{objs.date}} </p>
-        <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-        <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-    
+                <h3 class='pname'>{{objs.user.username}} </h3>
+
+            </div>
+            
+            <p class='ppost'> {{objs.post}} </p>
+            {% if objs.img != "False" %}
+                <img src="{{objs.img.url}}" width="200" height="200">
+            {% endif %}
+            <p class='pdate'> {{objs.date}} </p>
+            <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+            <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
         
-    </div>
+            
+        </button>
 
-    <script>
-
-        objID = "{{objs.id}}";
-        if (likedList.includes(objID)) {
-            document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
-            console.log("yuh");
-        }
-    
+        <br>
+        <br>
         
-       
-    
-        function Add(id, likes)
-        {
-            console.log("Hello");
-            if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
-                document.getElementById("Lpost"+id).innerHTML = "Like Post";
-                unlikeSession.push(id);
-                document.getElementById('unlikeProcess').value = unlikeSession.join("-");
-                if (likeSession.includes(id)) {
-                    likeSession.splice(unlikeSession.indexOf(id), 1);
-                }
-                document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
+        <script>
 
-
+            objID = "{{objs.id}}";
+            if (likedList.includes(objID)) {
+                document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
+                console.log("yuh");
             }
-            else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
-                document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
-                likeSession.push(id);
-                document.getElementById('likeProcess').value = likeSession.join("-");
-                if (unlikeSession.includes(id)) {
-                    unlikeSession.splice(unlikeSession.indexOf(id), 1);
-                }
-                document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
+
+        </script>
+
+
+    {% endfor %}
+</form>
+
+
+
+
+<script>
+
+    
+    
+
+    function Add(id, likes)
+    {
+        console.log("Hello");
+        if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
+            document.getElementById("Lpost"+id).innerHTML = "Like Post";
+            unlikeSession.push(id);
+            document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+            if (likeSession.includes(id)) {
+                likeSession.splice(unlikeSession.indexOf(id), 1);
             }
-            
-            
-            
+            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
+
+
+        }
+        else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
+            document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+            likeSession.push(id);
+            document.getElementById('likeProcess').value = likeSession.join("-");
+            if (unlikeSession.includes(id)) {
+                unlikeSession.splice(unlikeSession.indexOf(id), 1);
+            }
+            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
         }
         
+        
+        
+    }
+    
 
-    </script>
+</script>
 
-{% endfor %}
+
+
+
+
+
+
+<script>
+    function getPost(x) {
+        document.getElementById("selectedPost").value = x
+    }
+
+
+</script>
+
 
 {% endblock %}
