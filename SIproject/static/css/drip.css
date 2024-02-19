@@ -235,3 +235,11 @@ body {
 .postsButton:hover {
     background-color: #9a9a9a; /* Set the background color on hover */
 }
+
+.postsContainer {
+    background-color: white;
+    width: 75%;
+    text-align: left;
+    border-width: 20px;
+    box-shadow: 0 32px 64px rgba(0, 0, 0, 0.8); 
+}

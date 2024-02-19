@@ -25,10 +25,16 @@
 </script>
 
 
-<h1> Replies to post </h1>
+<div class="container-fluid p-5 bg-primary text-white text-center">
+    <h1> Replies to post </h1> 
+</div>
+
+<br>
+<br>
+<br>
 
 
-<div class='posts' >
+<div class='posts container postsContainer'>
             
     <div class='user-info'>
 
@@ -39,6 +45,20 @@
         <h3 class='pname'>{{ post.user.username}} </h3>
 
     </div>
+
+    {% if post.replyTo != "False" %}
+        {% for elem in allPosts %}
+            {% if elem.id|stringformat:"s" == post.replyTo|stringformat:"s" %}
+            <div class="mx-auto" style="background-color: rgba(246, 246, 246, 0.7)">
+                <h3 class="text-center" style="font-family: 'Arial', 'Helvetica', sans-serif;">Reply to @{{elem.user.username}}: {{elem.post}}</h3>
+                {% if elem.img != "False" %}
+                    <img src="{{ elem.img.url }}" width="90" height="90" class="mx-auto d-block img-fluid">
+                {% endif %}
+
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     
     <p class='ppost'> {{post.post}} </p>
     {% if post.img != "False" %}
@@ -46,59 +66,12 @@
     {% endif %}
     <p class='pdate'> {{post.date}} </p>
     <p class='plikes' id="Likes{{post.id}}" > Likes = {{post.likes}} </p>
-    <button onclick="Add({{post.id}}, {{post.likes}})" id="Lpost{{post.id}}">Like Post</button>
+    <button onclick="Add({{post.id}}, {{post.likes}})" id="Lpost{{post.id}}" type="button">Like Post</button>
 
 
 </div>
 
 
-
-
-
-
-<script>
-
-    console.log(likedList);
-
-    objID = "{{post.id}}";
-    if (likedList.includes("{{post.id}}")) {
-        document.getElementById("Lpost{{post.id}}").innerHTML = "Unlike Post";
-        console.log("yuh");
-    }
-
-    
-   
-
-    function Add(id, likes)
-    {
-        console.log("Hello");
-        if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
-            document.getElementById("Lpost"+id).innerHTML = "Like Post";
-            unlikeSession.push(id);
-            document.getElementById('unlikeProcess').value = unlikeSession.join("-");
-            if (likeSession.includes(id)) {
-                likeSession.splice(unlikeSession.indexOf(id), 1);
-            }
-            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
-
-
-        }
-        else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
-            document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
-            likeSession.push(id);
-            document.getElementById('likeProcess').value = likeSession.join("-");
-            if (unlikeSession.includes(id)) {
-                unlikeSession.splice(unlikeSession.indexOf(id), 1);
-            }
-            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
-        }
-        
-        
-        
-    }
-    
-
-</script>
 
 <br>
 <br>
@@ -140,53 +113,149 @@
 <br>
 <br>
 
-{% for objs in repliedPosts %}
 
-<button class='postsButton replies' onclick="getPost({{objs.id}})">
+
+<form method="post" action="replies">
+
+    {% csrf_token %}
+
+    <input type="hidden" id="selectedPost" name="selectedPost">
+    <input type = "hidden" id="likeProcess2" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
+
+
+    {% for objs in repliedPosts %}
+
+        <div class="d-flex justify-content-center align-items-center">
             
-    <div class='user-info'>
+            
+            <button class='postsButton' onclick="getPost({{objs.id}})">
+                
+                <div class='user-info'>
 
-        {% for user in allUsers%}
-            {% if user.username == objs.user.username %}
-                <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
-            {% endif %}
-        {% endfor %}
+                    {% for user in allUsers%}
+                        {% if user.username == objs.user.username %}
+                            <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                        {% endif %}
+                    {% endfor %}
+
+            
+                    <h3 class='pname'>{{objs.user.username}} </h3>
+
+                </div>
 
 
-        <h3 class='pname'>{{objs.user.username}} </h3>
+                {% if objs.replyTo != "False" %}
+                {% for elem in allPosts %}
+                    {% if elem.id|stringformat:"s" == objs.replyTo|stringformat:"s" %}
+                    <div class="mx-auto" style="background-color: rgba(246, 246, 246, 0.7)">
+                        <h3 class="text-center" style="font-family: 'Arial', 'Helvetica', sans-serif;">Reply to @{{elem.user.username}}: {{elem.post}}</h3>
+                        {% if elem.img != "False" %}
+                            <img src="{{ elem.img.url }}" width="90" height="90" class="mx-auto d-block img-fluid">
+                        {% endif %}
 
-    </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+                
+                <p class='ppost'> {{objs.post}} </p>
+                {% if objs.img != "False" %}
+                    <img src="{{objs.img.url}}" width="200" height="200">
+                {% endif %}
+                <p class='pdate'> {{objs.date}} </p>
+                <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+            
+                
+            </button>
+
+        </div> 
+
+        <br>
+        <br>
+        
+        <script>
+
+            objID = "{{objs.id}}";
+            if (likedList.includes(objID)) {
+                document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
+                console.log("yuh");
+            }
+
+        </script>
+
+        
+            
+
+
+    {% endfor %}
+</form>
+
+<script>
+
+    console.log(likedList);
+
+    objID = "{{post.id}}";
+    if (likedList.includes("{{post.id}}")) {
+        document.getElementById("Lpost{{post.id}}").innerHTML = "Unlike Post";
+        console.log("yuh");
+    }
+
+</script>
+
+
+<script>
+
     
-    <p class='ppost'> {{objs.post}} </p>
-    {% if objs.img != "False" %}
-        <img src="{{objs.img.url}}" width="200" height="200">
-    {% endif %}
-    <p class='pdate'> {{objs.date}} </p>
-    <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-    <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-
-    
-</button>
-
-<br>
-<br>
-<br>
-
-
-
-
-
-
-{% endfor %}
-
     
 
+    function Add(id, likes)
+    {
+        console.log("Hello");
+        if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
+            document.getElementById("Lpost"+id).innerHTML = "Like Post";
+            unlikeSession.push(id);
+            document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+            document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
+            if (likeSession.includes(id)) {
+                likeSession.splice(unlikeSession.indexOf(id), 1);
+            }
+            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
+
+
+        }
+        else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
+            document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+            likeSession.push(id);
+            document.getElementById('likeProcess').value = likeSession.join("-");
+            document.getElementById('likeProcess2').value = likeSession.join("-");
+            if (unlikeSession.includes(id)) {
+                unlikeSession.splice(unlikeSession.indexOf(id), 1);
+            }
+            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
+        }
+        
+        
+        
+    }
+    
+
+</script>
 
 
 
 
 
 
+
+<script>
+    function getPost(x) {
+        document.getElementById("selectedPost").value = x
+    }
+
+
+</script>
 
 
 {% endblock %}

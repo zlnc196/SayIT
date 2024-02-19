@@ -295,7 +295,10 @@ def profile(request):
     if post == "":
         postValid = False
         
-    replyCheck = request.POST["replyCheck"]    
+    try:
+        replyCheck = request.POST["replyCheck"]    
+    except:
+        replyCheck = "False"
     bannedWords = ['nigger', 'faggot', 'hitler', 'nazi', 'nigga', 'beaner', 'coon', 'ching', 'chong', 'kike']
     for word in post.split():
         if word.lower() in bannedWords:
@@ -585,6 +588,7 @@ def replies(request):
     try:
         likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
         unlikeProcess = request.POST["unlikeProcess"] 
+        print("pls work mannnnn")
         print(likeProcess)          # Just for testing
         print(unlikeProcess)
         likeArray = []
@@ -676,7 +680,9 @@ def replies(request):
     
     print(likedList)
     
-    return render(request, "replies.html", {"post": selectedPost, "likedList":likedList, "repliedPosts": repliedPosts, 'allUsers': allUsers})
+    allPosts = Posts.objects.all()
+    
+    return render(request, "replies.html", {"post": selectedPost, "likedList":likedList, "repliedPosts": repliedPosts, 'allUsers': allUsers, "allPosts":allPosts})
 
 
 def blockUser(request):

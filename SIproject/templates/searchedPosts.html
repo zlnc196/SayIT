@@ -58,6 +58,20 @@
                     <h3 class='pname'>{{objs.user.username}} </h3>
 
                 </div>
+
+                {% if objs.replyTo != "False" %}
+                {% for elem in allPosts %}
+                    {% if elem.id|stringformat:"s" == objs.replyTo|stringformat:"s" %}
+                    <div class="mx-auto" style="background-color: rgba(246, 246, 246, 0.7)">
+                        <h3 class="text-center" style="font-family: 'Arial', 'Helvetica', sans-serif;">Reply to @{{elem.user.username}}: {{elem.post}}</h3>
+                        {% if elem.img != "False" %}
+                            <img src="{{ elem.img.url }}" width="90" height="90" class="mx-auto d-block img-fluid">
+                        {% endif %}
+
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
                 
                 <p class='ppost'> {{objs.post}} </p>
                 {% if objs.img != "False" %}

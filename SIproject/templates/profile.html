@@ -61,61 +61,52 @@
 
     {% for objs in uposts %}
 
-    <div class="d-flex justify-content-center align-items-center">
-        
-        <button class='postsButton' onclick="getPost({{objs.id}})">
-
-            {% if objs.replyTo != "False" %}
-                {% for elem in allPosts %}
-                    {% if elem.id == objs.replyTo%}
-                        <h2>@{{elem.user.username}}: {{elem.post}}</h2>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-
-
+        <div class="d-flex justify-content-center align-items-center">
             
-            <div class='user-info'>
-
-                {% for user in allUsers%}
-                    {% if user.username == objs.user.username %}
-                        <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
-                    {% endif %}
-                {% endfor %}
-
-        
-                <h3 class='pname'>{{objs.user.username}} </h3>
-
-            </div>
             
-            <p class='ppost'> {{objs.post}} </p>
-            {% if objs.img != "False" %}
-                <img src="{{objs.img.url}}" width="200" height="200">
-            {% endif %}
-            <p class='pdate'> {{objs.date}} </p>
-            <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-            
-
-        </button>
-
-        <div>
-
-            <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-
-            <form method='post' action="dprofile">
-
-                {% csrf_token %}
-            
-                <button type='submit'> Delete post </button>
-
-                <input type="hidden" name="delpost" value="{{objs.id}}">
+            <button class='postsButton' onclick="getPost({{objs.id}})">
                 
+                <div class='user-info'>
+
+                    {% for user in allUsers%}
+                        {% if user.username == objs.user.username %}
+                            <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                        {% endif %}
+                    {% endfor %}
+
             
-            </form>
+                    <h3 class='pname'>{{objs.user.username}} </h3>
 
-        </div>
+                </div>
 
-    </div>
+                {% if objs.replyTo != "False" %}
+                {% for elem in allPosts %}
+                    {% if elem.id|stringformat:"s" == objs.replyTo|stringformat:"s" %}
+                    <div class="mx-auto" style="background-color: rgba(246, 246, 246, 0.7)">
+                        <h3 class="text-center" style="font-family: 'Arial', 'Helvetica', sans-serif;">Reply to @{{elem.user.username}}: {{elem.post}}</h3>
+                        {% if elem.img != "False" %}
+                            <img src="{{ elem.img.url }}" width="90" height="90" class="mx-auto d-block img-fluid">
+                        {% endif %}
+
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+                
+                <p class='ppost'> {{objs.post}} </p>
+                {% if objs.img != "False" %}
+                    <img src="{{objs.img.url}}" width="200" height="200">
+                {% endif %}
+                <p class='pdate'> {{objs.date}} </p>
+                <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+            
+                
+            </button>
+
+          
+
+        </div> 
 
         <br>
         <br>
@@ -130,9 +121,18 @@
 
         </script>
 
+        
+            
+
 
     {% endfor %}
 </form>
+
+
+   
+
+
+        
 
 
 
@@ -184,6 +184,10 @@
 <script>
     function getPost(x) {
         document.getElementById("selectedPost").value = x
+    }
+
+    function getPostD(x) {
+        document.querySelector.value = x
     }
 
 

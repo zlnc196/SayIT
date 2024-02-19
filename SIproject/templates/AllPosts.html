@@ -4,16 +4,26 @@
 
 {% block content %}
 
-
 <div class="container-fluid p-5 bg-primary text-white text-center">
-<h1> Most popular posts </h1>
+
+    <img src="{{CurrentUser.profilePicture.url}}" width="200" height="200" class='largePfp'>
+    <h1> @{{cuser}}'s profile </h1>
+
+    <p> {{CurrentUser.bio}} </p>
+
 </div>
+
+<form method='post' action='editProfile'>
+    {% csrf_token %}
+
+    <button type='submit' class="btn btn-outline-secondary">Edit Profile </button> <br>
+</form>
 
 <form method='post' action='homepage'>
 
     {% csrf_token %}
 
-    <button type='submit' class="btn btn-outline-secondary" > Return to home </button> <br> <br>
+    <button type='submit' class="btn btn-outline-secondary"> Return to home </button> <br>
     <input type = "hidden" id="likeProcess" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
 
@@ -27,6 +37,16 @@
     let likes;
 
 </script>
+
+
+<form method='post' action="likedPosts">
+
+    {% csrf_token %}
+
+    <button type='submit' class="btn btn-outline-secondary"> Liked posts </button> 
+    
+
+</form> 
 
 
 
@@ -58,6 +78,20 @@
                     <h3 class='pname'>{{objs.user.username}} </h3>
 
                 </div>
+
+                {% if objs.replyTo != "False" %}
+                {% for elem in allPosts %}
+                    {% if elem.id|stringformat:"s" == objs.replyTo|stringformat:"s" %}
+                    <div class="mx-auto" style="background-color: rgba(246, 246, 246, 0.7)">
+                        <h3 class="text-center" style="font-family: 'Arial', 'Helvetica', sans-serif;">Reply to @{{elem.user.username}}: {{elem.post}}</h3>
+                        {% if elem.img != "False" %}
+                            <img src="{{ elem.img.url }}" width="90" height="90" class="mx-auto d-block img-fluid">
+                        {% endif %}
+
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
                 
                 <p class='ppost'> {{objs.post}} </p>
                 {% if objs.img != "False" %}
@@ -69,6 +103,8 @@
             
                 
             </button>
+
+          
 
         </div> 
 
@@ -91,6 +127,12 @@
 
     {% endfor %}
 </form>
+
+
+   
+
+
+        
 
 
 
@@ -119,7 +161,7 @@
             document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
             likeSession.push(id);
             document.getElementById('likeProcess').value = likeSession.join("-");
-            document.getElementById('likeProcess2').value = unlikeSession.join("-");
+            document.getElementById('likeProcess2').value = likeSession.join("-");
             if (unlikeSession.includes(id)) {
                 unlikeSession.splice(unlikeSession.indexOf(id), 1);
             }
