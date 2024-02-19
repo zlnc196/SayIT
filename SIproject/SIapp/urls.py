@@ -8,7 +8,6 @@ urlpatterns = [
     path('confirm', views.confirm, name='confirm'),
     path('homepage', views.homepage, name='confirm'),
     path('profile', views.profile, name='profile'),
-    path('dprofile', views.dprofile, name='dprofile'),
     path('AllPosts', views.AllPosts, name='AllPosts'),
     path('likedPosts', views.LikedPosts, name='likedPosts'),
     path('editProfile', views.editProfile, name='editProfile'),
@@ -21,5 +20,6 @@ urlpatterns = [
     path('followedPosts', views.FollowedPosts, name="followedPosts"),
     path('blockUser', views.blockUser, name="blockUser"),
     path('intro', views.intro, name='intro'),
-    path('afterReport', views.afterReport, name='afterReport')
+    path('afterReport', views.afterReport, name='afterReport'),
+    path('afterPostReport', views.afterPostReport, name="afterPostReport")
 ]

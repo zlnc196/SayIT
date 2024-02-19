@@ -132,7 +132,7 @@ def confirm(request):
 
             
     if valid == True:
-        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = timezone.now() ,first_name = 'Dont', last_name = 'Worry', liked_posts=[], followedUsers = [], blockList=[]) #blockList=[], userReportedList=[] )
+        user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = timezone.now() ,first_name = 'Dont', last_name = 'Worry', liked_posts=[], followedUsers = [], blockList=[], userReports=[]) #blockList=[], userReportedList=[] )
         user.save()
         return redirect("login")
     
@@ -328,6 +328,19 @@ def profile(request):
             postRepliedTo = Posts.objects.get(id=repliedTo)
             postRepliedTo.replies.append(newPost.id)
             postRepliedTo.save()
+            
+    try:      
+        delpost = request.POST["delpost"]
+    except:
+        delpost = "False"
+    
+    if delpost != "False":
+        Posts.objects.get(id=delpost).delete()
+        for users in get_user_model().objects.all():
+            likeList = users.liked_posts 
+            if str(delpost) in likeList: 
+                likeList.remove(delpost)
+        
         
     
         
@@ -343,6 +356,8 @@ def profile(request):
     
     allPosts = Posts.objects.all()
     
+    
+    
   
     
     
@@ -354,29 +369,7 @@ def profile(request):
     return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers, 'allUsers': allUsers, "allPosts":allPosts})
 
 
-@login_required(login_url='login')
-def dprofile(request):
-    currentUser = request.user.username
-    cusers = request.user
-    
-    delpost = request.POST['delpost']
-    
-    
-    
-    
-    Posts.objects.get(id=delpost).delete()
-        
-    usersPosts = Posts.objects.filter(user=cusers.id)
-    for users in get_user_model().objects.all():
-        likeList = users.liked_posts 
-        if str(delpost) in likeList: 
-            likeList.remove(delpost)
-            
-    likedList = cusers.liked_posts
-    likedList = "-".join(likedList)
-    allUsers = get_user_model().objects.all()
-  
-    return render(request,'profile.html', {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'allUsers': allUsers, 'CurrentUser':cusers })
+
 
 
 def AllPosts(request):
@@ -739,6 +732,17 @@ def afterReport(request):
     otherUser = get_user_model().objects.get(id=otherUserId)
     otherUser.userReports.append(reason)
     otherUser.save()
+    
+    return render(request, "afterReport.html")
+
+
+def afterPostReport(request):
+    reason = request.POST["reportReason"]
+    currentUser = request.user
+    reportedPostID = request.POST['reportedPost']
+    reportedPost = Posts.objects.get(id=reportedPostID)
+    reportedPost.postReports.append(reason)
+    reportedPost.save()
     
     return render(request, "afterReport.html")
 

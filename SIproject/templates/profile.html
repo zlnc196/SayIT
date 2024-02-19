@@ -50,13 +50,14 @@
 
 
 
-<form method="post" action="replies">
+<form id="mainForm" method="post" action="replies">
 
     {% csrf_token %}
 
     <input type="hidden" id="selectedPost" name="selectedPost">
     <input type = "hidden" id="likeProcess2" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
+    <input type="hidden" id="delpost" name = "delpost" value="False">
 
 
     {% for objs in uposts %}
@@ -100,6 +101,9 @@
                 <p class='pdate'> {{objs.date}} </p>
                 <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
                 <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+                 
+                <button onclick="getPostD({{objs.id}})"> Delete Post </button>
+                
             
                 
             </button>
@@ -118,6 +122,8 @@
                 document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
                 console.log("yuh");
             }
+
+
 
         </script>
 
@@ -167,6 +173,8 @@
             }
             document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
         }
+
+        
         
         
         
@@ -187,7 +195,8 @@
     }
 
     function getPostD(x) {
-        document.querySelector.value = x
+        document.getElementById("delpost").value = x
+        document.getElementById("mainForm").action = "profile";
     }
 
 
