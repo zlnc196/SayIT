@@ -4,43 +4,54 @@
 
 {% block content %}
 
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/logo2.png' %}" alt="Avatar Logo" style="width:40px;" class="rounded-pill"> 
+        </a>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="AllPosts">Popular posts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="followedPosts">Posts by followed Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="intro">Log out</a>
+            </li>
+        </ul>
 
-<form method="post" action="intro">
-    {% csrf_token %}
-    <button> Logout </button>
+        <div class='searchSection'>
+            <form method='post' action='search'>
+                {% csrf_token %}
+                    <input for='text' placeholder='search' class='searcher form-control' oninput="updateSearchButtons()" name='searchedFor'>
+                    <input type = "hidden" id="userOrPost" name='userOrPost'>
+            
+        </div>
+    </div>
+</nav>
+
+
+
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-6 ms-auto me-0">
+            <div class="d-flex flex-column align-items-end">
+                <button id="searchPost" type="submit" onclick="postOrUser('post')" class="btn btn-secondary mb-2">Search Post</button>
+                <button id="searchUser" type="submit" onclick="postOrUser('user')" class="btn btn-secondary" >Search User</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </form>
 
+    
 
-
-<div class='buttongroup'>
-    <form method='post' action='profile'>
-        {% csrf_token %}
-        <button type='submit' class = 'topbuttons btn btn-primary'> Your profile </button>
-    </form>
-
-
-    <form method='post' action='AllPosts'>
-        {% csrf_token %}
-        <button type='submit' class = 'topbuttons btn btn-primary'> Most popular posts  </button>
-    </form>
-
-
-
-    <form method='post' action='followedPosts'>
-        {% csrf_token %}
-        <button type='submit' class = 'topbuttons btn btn-primary'> Posts from followed accounts </button>
-    </form>
-    <div class='searchSection'>
-        <form method='post' action='search'>
-            {% csrf_token %}
-                <input for='text' placeholder='search' class='searcher form-control' oninput="updateSearchButtons()" name='searchedFor'>
-                <button id="searchPost" type ='submit' onclick="postOrUser('post')" class="d-none"></button>
-                <button id="searchUser" type='submit' onclick="postOrUser('user')" class="d-none"></button>
-                <input type = "hidden" id="userOrPost" name='userOrPost'>
-        </form>
-    </div>
-</div>
 
 
 
@@ -55,9 +66,13 @@
         </div>
     </div>
     
-    <input type="file" name="image" accept="image/*">
+    <input type="file" name="image" id="image" accept="image/*" style="display:none">
+
+    <label for="image">
+        <img src="{% static 'images/select.png' %}" alt="File Icon" style="width: 40px; height: 40px; margin-right: 5px%; position:absolute; left: 26%; top: 48%">
+    </label>
     
-    <button type='submit' id='spost' class="btn btn-primary">Post</button>
+    <button type='submit' id='spost' class="btn btn-primary" >Post</button>
     
     <input type="hidden" name="replyCheck" value="False">
 </form>
