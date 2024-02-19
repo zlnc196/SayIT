@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     followers = models.IntegerField(default=0)
     followedUsers = ArrayField(models.CharField(max_length=100, default=[]))
     blockList = ArrayField(models.CharField(max_length=100, default=[]))
+    userReports = ArrayField(models.CharField(max_length=100, default=[]))
     def __str__(self):
         return self.username
     groups = None
@@ -35,6 +36,8 @@ class Posts(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     img = models.ImageField(upload_to="media", default=False)
     replies = ArrayField(models.CharField(max_length=100, default=[]))
+    replyTo = models.CharField(max_length=200)
+    postReports = ArrayField(models.CharField(max_length=100, default=[]))
     
     
     

@@ -295,21 +295,29 @@ def profile(request):
     if post == "":
         postValid = False
         
-        
+    replyCheck = request.POST["replyCheck"]    
     bannedWords = ['nigger', 'faggot', 'hitler', 'nazi', 'nigga', 'beaner', 'coon', 'ching', 'chong', 'kike']
     for word in post.split():
         if word.lower() in bannedWords:
             post = 'Invalid due to hate speech'
     if postValid == True or imageValid:   
         if imageValid:  
-            newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, img=image, replies=[])
+            if replyCheck == "True":
+                repliedTo = request.POST["repliedTo"] 
+                newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, img=image, replies=[], replyTo=repliedTo, postReports=[])
+            else:
+                newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, img=image, replies=[], replyTo="False", postReports=[])      
         else:
-            newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, replies=[])
+            if replyCheck == "True":
+                repliedTo = request.POST["repliedTo"] 
+                newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, replies=[], replyTo=repliedTo, postReports=[])
+            else:    
+                newPost = Posts.objects.create(post=post, user=cusers, date = timeOfPost, likes = 0, replies=[], replyTo="False", postReports=[])
             
         newPost.save()
             
             
-        replyCheck = request.POST["replyCheck"]
+        
         if replyCheck == "True":
             print("should work")
             repliedTo = request.POST["repliedTo"]
@@ -317,6 +325,8 @@ def profile(request):
             postRepliedTo = Posts.objects.get(id=repliedTo)
             postRepliedTo.replies.append(newPost.id)
             postRepliedTo.save()
+        
+    
         
             
     usersPosts = Posts.objects.filter(user=cusers.id).order_by("-date_created")
@@ -328,6 +338,8 @@ def profile(request):
     likedList = "-".join(likedList)
     allUsers = get_user_model().objects.all()
     
+    allPosts = Posts.objects.all()
+    
   
     
     
@@ -336,7 +348,7 @@ def profile(request):
     
     
     
-    return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers, 'allUsers': allUsers  })
+    return render(request,route, {'cuser':currentUser, 'uposts':usersPosts, "likedList": likedList, 'CurrentUser':cusers, 'allUsers': allUsers, "allPosts":allPosts})
 
 
 @login_required(login_url='login')

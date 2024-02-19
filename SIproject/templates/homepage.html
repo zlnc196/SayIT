@@ -41,8 +41,8 @@
     <div class="row">
         <div class="col-md-6 ms-auto me-0">
             <div class="d-flex flex-column align-items-end">
-                <button id="searchPost" type="submit" onclick="postOrUser('post')" class="btn btn-secondary mb-2">Search Post</button>
-                <button id="searchUser" type="submit" onclick="postOrUser('user')" class="btn btn-secondary" >Search User</button>
+                <button id="searchPost" type="submit" onclick="postOrUser('post')" class="btn btn-secondary mb-2 d-none"></button>
+                <button id="searchUser" type="submit" onclick="postOrUser('user')" class="btn btn-secondary d-none" ></button>
             </div>
         </div>
     </div>
@@ -58,6 +58,8 @@
 
 <form method='post' action='profile' enctype="multipart/form-data">
     {% csrf_token %}
+
+    <input type="hidden" name="replyCheck" value="False">
     
     <div class="d-flex justify-content-center align-items-center">
         <div class="form-floating col-md-6">

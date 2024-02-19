@@ -64,6 +64,16 @@
     <div class="d-flex justify-content-center align-items-center">
         
         <button class='postsButton' onclick="getPost({{objs.id}})">
+
+            {% if objs.replyTo != "False" %}
+                {% for elem in allPosts %}
+                    {% if elem.id == objs.replyTo%}
+                        <h2>@{{elem.user.username}}: {{elem.post}}</h2>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+
             
             <div class='user-info'>
 
