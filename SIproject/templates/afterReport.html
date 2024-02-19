@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<form method='post' action='homepage'>
+
+    {% csrf_token %}
+
+    <button type='submit'> Return to home </button>
+    <input type = "hidden" id="likeProcess" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
+
+</form>
+
+<h1> Thanks for reporting </h1>
+
+<p> I hope this message finds you well. I wanted to express my sincere gratitude for taking the time to submit a report. Your effort and diligence are greatly appreciated as they contribute significantly to the improvement and maintenance of our system. 
+    Your commitment to ensuring the smooth functioning of our platform is commendable, and we value your input. Our team will thoroughly review the report you provided, and we are confident that it will help us identify and address any issues promptly.
+    Once again, thank you for your dedication to the betterment of our service. If you have any further observations or feedback, please don't hesitate to reach out. We truly value your collaboration and look forward to continuing to work together to enhance the user experience.
+    Best regards, </p>
+
+
+{% endblock %}

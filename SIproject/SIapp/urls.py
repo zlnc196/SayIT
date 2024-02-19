@@ -21,4 +21,5 @@ urlpatterns = [
     path('followedPosts', views.FollowedPosts, name="followedPosts"),
     path('blockUser', views.blockUser, name="blockUser"),
     path('intro', views.intro, name='intro'),
+    path('afterReport', views.afterReport, name='afterReport')
 ]

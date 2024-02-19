@@ -82,7 +82,11 @@
 <form method='post' action='profile' enctype="multipart/form-data">
     {%csrf_token%}
     <textarea rows="10" cols="30"placeholder='Reply to post' class="replyPoster" name="post"> reply to @{{post.user.username}} </textarea>
-    <input type="file" name="image" accept="image/*">
+    <input type="file" name="image" id="image" accept="image/*" style="display:none">
+
+    <label for="image">
+        <img src="{% static 'images/select.png' %}" alt="File Icon" style="width: 40px; height: 40px; margin-right: 5px%; position:absolute; left: 27%; top: 130%">
+    </label>
     <button type='submit' class='sreply'> Post </button>
     <input type="hidden" name="replyCheck" value="True">
     <input type="hidden" name="repliedTo" value="{{post.id}}">

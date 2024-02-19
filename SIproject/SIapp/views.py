@@ -732,7 +732,15 @@ def blockUser(request):
     
 
 
-
+def afterReport(request):
+    reason = request.POST["reportReason"]
+    currentUser = request.user
+    otherUserId = request.POST['otherUser']
+    otherUser = get_user_model().objects.get(id=otherUserId)
+    otherUser.userReports.append(reason)
+    otherUser.save()
+    
+    return render(request, "afterReport.html")
 
 
     
