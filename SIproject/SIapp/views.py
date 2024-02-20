@@ -418,12 +418,15 @@ def followChange(request):
 def otherLikedPosts(request):
     otherUserId = request.POST['otherUser2']
     otherUser = get_user_model().objects.get(id=otherUserId)
-    likeList = otherUser.liked_posts 
-    likedPosts = Posts.objects.filter(id__in=likeList)
-    allUsers = get_user_model().objects.all()
+    otherLikedList = otherUser.liked_posts
+    likedPosts = Posts.objects.filter(id__in=otherLikedList)
     currentUser = request.user
+    likedList = currentUser.liked_posts
+    likedList = "-".join(likedList)
+    allUsers = get_user_model().objects.all()
+  
     
-    return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers, "currentUser": currentUser })    
+    return render(request, 'otherLiked.html', {"likedPosts": likedPosts, "otherUser": otherUser, 'allUsers': allUsers, "currentUser": currentUser, "likedList":likedList })    
     
 @login_required(login_url='login')    
 def replies(request):
