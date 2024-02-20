@@ -167,11 +167,11 @@
     
             <div>
     
-                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-success">Like Post</button>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-outline-success">Like Post</button>
 
                 
             
-                <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-danger">
                     Report Post
                 </button>
                 </div>
@@ -218,7 +218,8 @@
                 objID = "{{objs.id}}";
                 if (likedList.includes(objID)) {
                     document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
-                    console.log("yuh");
+                    document.getElementById('Lpost{{objs.id}}').classList.remove('btn-outline-success');
+                    document.getElementById('Lpost{{objs.id}}').classList.add('btn-success');
                 }
     
             </script>
@@ -237,9 +238,11 @@
 
         function Add(id, likes)
         {
-            console.log("Hello");
             if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
                 document.getElementById("Lpost"+id).innerHTML = "Like Post";
+                document.getElementById('Lpost'+id).classList.remove('btn-success');
+                document.getElementById('Lpost'+id).classList.add('btn-outline-success');
+
                 unlikeSession.push(id);
                 document.getElementById('unlikeProcess').value = unlikeSession.join("-");
                 document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
@@ -253,6 +256,9 @@
             }
             else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
                 document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+                document.getElementById('Lpost'+id).classList.remove('btn-outline-success');
+                document.getElementById('Lpost'+id).classList.add('btn-success');
+                
                 likeSession.push(id);
                 document.getElementById('likeProcess').value = likeSession.join("-");
                 document.getElementById('likeProcess2').value = likeSession.join("-");
