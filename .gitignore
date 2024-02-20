@@ -1,6 +1,6 @@
 env/
 
-SIproject/settings.py
+SIproject/SIproject/settings.py
 
 SIproject/SIapp/migrations/
 
