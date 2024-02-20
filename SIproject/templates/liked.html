@@ -5,13 +5,15 @@
 {% block content %}
 
 
-<h1> @{{cuser}}'s Liked posts </h1>
+<div class="container-fluid p-5 bg-primary text-white text-center">
+<h1> Your liked Posts </h1>
+</div>
 
 <form method='post' action='homepage'>
 
     {% csrf_token %}
 
-    <button type='submit'> Return to home </button>
+    <button type='submit' class="btn btn-outline-secondary"> Return to home </button> <br> <br>
     <input type = "hidden" id="likeProcess" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
 
@@ -27,49 +29,102 @@
 </script>
 
 
-<form method='post' action="likedPosts">
-
-    {% csrf_token %}
-
-    <button type='submit'> Liked posts </button>
-    
-
-</form>
 
 <form method="post" action="replies">
 
     {% csrf_token %}
 
     <input type="hidden" id="selectedPost" name="selectedPost">
+    <input type = "hidden" id="likeProcess2" name='likeProcess'>
+    <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
 
 
     {% for objs in likedPosts %}
-        
-        <button class='postsButton' onclick="getPost({{objs.id}})">
-            
-            <div class='user-info'>
 
-                {% for user in allUsers%}
-                    {% if user.username == objs.user.username %}
-                        <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+        <div class="d-flex justify-content-center align-items-center">
+            
+            
+            <button class='postsButton' onclick="getPost({{objs.id}})">
+                
+                <div class='user-info'>
+
+                    {% for user in allUsers%}
+                        {% if user.username == objs.user.username %}
+                            <img src="{{ user.profilePicture.url }}" width='50' height='50' class='ppfp'>
+                        {% endif %}
+                    {% endfor %}
+
+            
+                    <h3 class='pname'>{{objs.user.username}} </h3>
+
+                </div>
+
+
+                {% if objs.replyTo != "False" %}
+                {% for elem in allPosts %}
+                    {% if elem.id|stringformat:"s" == objs.replyTo|stringformat:"s" %}
+                    <div class="mx-auto" style="background-color: rgba(246, 246, 246, 0.7)">
+                        <h3 class="text-center" style="font-family: 'Arial', 'Helvetica', sans-serif;">Reply to @{{elem.user.username}}: {{elem.post}}</h3>
+                        {% if elem.img != "False" %}
+                            <img src="{{ elem.img.url }}" width="90" height="90" class="mx-auto d-block img-fluid">
+                        {% endif %}
+
+                    </div>
                     {% endif %}
                 {% endfor %}
+                {% endif %}
+                
+                <p class='ppost'> {{objs.post}} </p>
+                {% if objs.img != "False" %}
+                    <img src="{{objs.img.url}}" width="200" height="200">
+                {% endif %}
+                <p class='pdate'> {{objs.date}} </p>
+                <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
 
-        
-                <h3 class='pname'>{{objs.user.username}} </h3>
+                <form method="post" action="afterPostReport">
 
-            </div>
+                    {% csrf_token %}
             
-            <p class='ppost'> {{objs.post}} </p>
-            {% if objs.img != "False" %}
-                <img src="{{objs.img.url}}" width="200" height="200">
-            {% endif %}
-            <p class='pdate'> {{objs.date}} </p>
-            <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-            <button onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
-        
+                    <input type='hidden' id='reportedPost' name='reportedPost' value='{{objs.id}}'>
             
-        </button>
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Report Post
+                    </button>
+                    </div>
+            
+                    
+                    <!-- The Modal -->
+                    <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                    
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"> Reason for report </h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                    
+                        <!-- Modal body -->
+                        
+                        <textarea placeholder="enter reason" class="modal-body" name="reportReason"></textarea>
+                    
+                    
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Submit</button>
+                        </div>
+                    
+                        </div>
+                    </div>
+                    </div>
+            
+                </form>
+            
+                
+            </button>
+
+        </div> 
 
         <br>
         <br>
@@ -83,6 +138,9 @@
             }
 
         </script>
+
+        
+            
 
 
     {% endfor %}
@@ -103,6 +161,7 @@
             document.getElementById("Lpost"+id).innerHTML = "Like Post";
             unlikeSession.push(id);
             document.getElementById('unlikeProcess').value = unlikeSession.join("-");
+            document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
             if (likeSession.includes(id)) {
                 likeSession.splice(unlikeSession.indexOf(id), 1);
             }
@@ -114,11 +173,16 @@
             document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
             likeSession.push(id);
             document.getElementById('likeProcess').value = likeSession.join("-");
+            document.getElementById('likeProcess2').value = likeSession.join("-");
             if (unlikeSession.includes(id)) {
                 unlikeSession.splice(unlikeSession.indexOf(id), 1);
             }
             document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
         }
+
+        console.log(likeSession.join("-"))
+
+        console.log(unlikeSession.join("-"))
         
         
         
