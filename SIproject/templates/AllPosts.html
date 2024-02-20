@@ -92,7 +92,7 @@
                 {% endif %}
                 <p class='pdate'> {{objs.date}} </p>
                 <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-success">Like Post</button>
 
                 <form method="post" action="afterPostReport">
 
