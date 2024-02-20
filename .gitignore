@@ -1,0 +1,11 @@
+env/
+
+SIproject/settings.py
+
+SIproject/SIapp/migrations/
+
+SIproject/media/
+
+SIproject/SIproject/__pycache__/
+
+SIproject/SIapp/__pycache__/
