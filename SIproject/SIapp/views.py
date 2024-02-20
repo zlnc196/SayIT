@@ -283,6 +283,66 @@ def FollowedPosts(request):
 
 @login_required(login_url='login')
 def LikedPosts(request):
+    try:
+        likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
+        unlikeProcess = request.POST["unlikeProcess"] 
+        likeArray = []
+        unlikeArray = []
+        word=""
+        for char in likeProcess:                               #Quick algorithm to convert it back into a list
+            
+            if char == "-":
+                likeArray.append(word)
+                word=""
+            else:
+                word=word+char
+        likeArray.append(word)
+        likeArray = list(dict.fromkeys(likeArray))
+        
+        unword=""
+        for char in unlikeProcess:                               #Quick algorithm to convert it back into a list
+            
+            if char == "-":
+                unlikeArray.append(unword)
+                unword=""
+            else:
+                unword=unword+char
+        unlikeArray.append(unword)
+        unlikeArray = list(dict.fromkeys(unlikeArray))
+        
+        for elem in likeArray:
+            idholder = request.user
+            try:
+                testHolder = int(elem)
+                canAdd = True
+            except:
+                canAdd = False
+            
+            if canAdd == True:
+                if elem not in idholder.liked_posts:
+                    idholder.liked_posts.append(elem)
+                    lidholder = Posts.objects.get(id = int(elem))
+                    lidholder.likes = lidholder.likes+1
+                    idholder.save()
+                    lidholder.save()
+                
+        for elem in unlikeArray:
+            idholder = request.user
+            try:
+                testHolder = int(elem)
+                canRemove = True
+            except:
+                canRemove = False
+                
+            if canRemove == True:
+                if elem in idholder.liked_posts:
+                    idholder.liked_posts.remove(elem)
+                    lidholder = Posts.objects.get(id = int(elem))
+                    lidholder.likes = lidholder.likes-1
+                    idholder.save()
+                    lidholder.save()   
+    except:
+        pass
     currentUsername = request.user.username
     allPosts = Posts.objects.all()
     currentUser = request.user
@@ -291,7 +351,7 @@ def LikedPosts(request):
     likedList = "-".join(likedList)
     allUsers = get_user_model().objects.all()
 
-    return render(request, 'liked.html', {"likedPosts": likedPosts, "currentUsername": currentUsername, 'allUsers': allUsers, "likedList":likedList })
+    return render(request, 'liked.html', {"likedPosts": likedPosts, "currentUsername": currentUsername, 'allUsers': allUsers, "likedList":likedList, "allPosts":allPosts })
 
 @login_required(login_url='login')
 def editProfile(request):
@@ -416,6 +476,66 @@ def followChange(request):
     
 @login_required(login_url='login')   
 def otherLikedPosts(request):
+    try:
+        likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
+        unlikeProcess = request.POST["unlikeProcess"] 
+        likeArray = []
+        unlikeArray = []
+        word=""
+        for char in likeProcess:                               #Quick algorithm to convert it back into a list
+            
+            if char == "-":
+                likeArray.append(word)
+                word=""
+            else:
+                word=word+char
+        likeArray.append(word)
+        likeArray = list(dict.fromkeys(likeArray))
+        
+        unword=""
+        for char in unlikeProcess:                               #Quick algorithm to convert it back into a list
+            
+            if char == "-":
+                unlikeArray.append(unword)
+                unword=""
+            else:
+                unword=unword+char
+        unlikeArray.append(unword)
+        unlikeArray = list(dict.fromkeys(unlikeArray))
+        
+        for elem in likeArray:
+            idholder = request.user
+            try:
+                testHolder = int(elem)
+                canAdd = True
+            except:
+                canAdd = False
+            
+            if canAdd == True:
+                if elem not in idholder.liked_posts:
+                    idholder.liked_posts.append(elem)
+                    lidholder = Posts.objects.get(id = int(elem))
+                    lidholder.likes = lidholder.likes+1
+                    idholder.save()
+                    lidholder.save()
+                
+        for elem in unlikeArray:
+            idholder = request.user
+            try:
+                testHolder = int(elem)
+                canRemove = True
+            except:
+                canRemove = False
+                
+            if canRemove == True:
+                if elem in idholder.liked_posts:
+                    idholder.liked_posts.remove(elem)
+                    lidholder = Posts.objects.get(id = int(elem))
+                    lidholder.likes = lidholder.likes-1
+                    idholder.save()
+                    lidholder.save()   
+    except:
+        pass
     otherUserId = request.POST['otherUser2']
     otherUser = get_user_model().objects.get(id=otherUserId)
     otherLikedList = otherUser.liked_posts

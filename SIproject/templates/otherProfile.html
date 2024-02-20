@@ -117,6 +117,8 @@
     <form method='post' action="otherLikedPosts">
 
         {% csrf_token %}
+        <input type = "hidden" id="likeProcess3" name='likeProcess'>
+        <input type = "hidden" id="unlikeProcess3" name='unlikeProcess'>
 
         <button type='submit'> Liked posts </button>
         <input type='hidden' value='{{otherUser.id}}' name='otherUser2'>
@@ -244,6 +246,7 @@
                 unlikeSession.push(id);
                 document.getElementById('unlikeProcess').value = unlikeSession.join("-");
                 document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
+                document.getElementById('unlikeProcess3').value = unlikeSession.join("-");
                 if (likeSession.includes(id)) {
                     likeSession.splice(unlikeSession.indexOf(id), 1);
                 }
@@ -256,6 +259,7 @@
                 likeSession.push(id);
                 document.getElementById('likeProcess').value = likeSession.join("-");
                 document.getElementById('likeProcess2').value = likeSession.join("-");
+                document.getElementById('likeProcess3').value = likeSession.join("-");
                 if (unlikeSession.includes(id)) {
                     unlikeSession.splice(unlikeSession.indexOf(id), 1);
                 }
