@@ -7,13 +7,13 @@ from django.contrib.auth.models import AbstractUser
 
     
 class CustomUser(AbstractUser):
-    liked_posts= ArrayField(models.CharField(max_length=100, default=[]))
+    liked_posts= ArrayField(models.CharField(max_length=100), default=list, blank=True, null=True)
     profilePicture = models.ImageField(upload_to="media", default='media\pfp.png')
     bio = models.CharField(max_length=100, default = "user has no bio")
     followers = models.IntegerField(default=0)
-    followedUsers = ArrayField(models.CharField(max_length=100, default=[]))
-    blockList = ArrayField(models.CharField(max_length=100, default=[]))
-    userReports = ArrayField(models.CharField(max_length=100, default=[]))
+    followedUsers = ArrayField(models.CharField(max_length=100), default=list, blank=True, null=True)
+    blockList = ArrayField(models.CharField(max_length=100), default=list, blank=True, null=True)
+    userReports = ArrayField(models.CharField(max_length=100), default=list, blank=True, null=True)
     def __str__(self):
         return self.username
     groups = None
@@ -29,6 +29,8 @@ class Posts(models.Model):
     replies = ArrayField(models.CharField(max_length=100, default=[]))
     replyTo = models.CharField(max_length=200)
     postReports = ArrayField(models.CharField(max_length=100, default=[]))
+    
+    
     
     
     
