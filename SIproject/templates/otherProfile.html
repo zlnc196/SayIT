@@ -126,7 +126,7 @@
 
     </form>
 
-    <form method="post" action="replies">
+    <form method="post" action="replies" id="mainForm">
 
         {% csrf_token %}
 
@@ -198,7 +198,7 @@
                     
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Submit</button>
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
                         </div>
                     
                         </div>
@@ -282,6 +282,11 @@
     <script>
         function getPost(x) {
             document.getElementById("selectedPost").value = x
+        }
+
+        function getPostR(x) {
+            document.getElementById("reportedPost").value = x
+            document.getElementById("mainForm").action = "afterPostReport";
         }
 
 
