@@ -5,19 +5,9 @@
 {% block content %}
 
 <div class="container-fluid p-5 bg-primary text-white text-center">
-
-
     <h1>Popular posts</h1>
-
-  
-
 </div>
 
-<form method='post' action='editProfile'>
-    {% csrf_token %}
-
-    <button type='submit' class="btn btn-outline-secondary">Edit Profile </button> <br>
-</form>
 
 <form method='post' action='homepage'>
 
@@ -57,7 +47,7 @@
         <div class="d-flex justify-content-center align-items-center">
             
             
-            <button class='postsButton' onclick="getPost({{objs.id}})">
+            <button class='postsButton' onclick="getPost({{objs.id}})" type="submit">
                 
                 <div class='user-info'>
 
@@ -92,46 +82,39 @@
                 {% endif %}
                 <p class='pdate'> {{objs.date}} </p>
                 <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-success">Like Post</button>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-outline-success">Like Post</button>
 
-                <form method="post" action="afterPostReport">
-
-                    {% csrf_token %}
-            
+                
                     
             
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
-                        Report Post
-                    </button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-danger">
+                    Report Post
+                </button>
+                </div>
+        
+                
+                <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                
+                    <div class="modal-header">
+                        <h4 class="modal-title"> Reason for report </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-            
+                
                     
-                    <!-- The Modal -->
-                    <div class="modal" id="myModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                    
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title"> Reason for report </h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                    
-                        <!-- Modal body -->
-                        
-                        <textarea placeholder="enter reason" class="modal-body" name="reportReason"></textarea>
-                    
-                    
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
-                        </div>
-                    
-                        </div>
+                    <textarea placeholder="enter reason" class="modal-body" name="reportReason"></textarea>
+                
+                
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
                     </div>
+                
                     </div>
+                </div>
+                </div>
             
-                </form>
+            
             
                 
             </button>
@@ -148,7 +131,8 @@
             objID = "{{objs.id}}";
             if (likedList.includes(objID)) {
                 document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
-                console.log("yuh");
+                document.getElementById('Lpost{{objs.id}}').classList.remove('btn-outline-success');
+                document.getElementById('Lpost{{objs.id}}').classList.add('btn-success');
             }
 
         </script>
@@ -176,9 +160,11 @@
 
     function Add(id, likes)
     {
-        console.log("Hello");
         if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
             document.getElementById("Lpost"+id).innerHTML = "Like Post";
+            document.getElementById('Lpost'+id).classList.remove('btn-success');
+            document.getElementById('Lpost'+id).classList.add('btn-outline-success');
+            
             unlikeSession.push(id);
             document.getElementById('unlikeProcess').value = unlikeSession.join("-");
             document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
@@ -191,6 +177,8 @@
         }
         else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
             document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+            document.getElementById('Lpost'+id).classList.remove('btn-outline-success');
+            document.getElementById('Lpost'+id).classList.add('btn-success');
             likeSession.push(id);
             document.getElementById('likeProcess').value = likeSession.join("-");
             document.getElementById('likeProcess2').value = likeSession.join("-");

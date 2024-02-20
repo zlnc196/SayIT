@@ -66,7 +66,7 @@
     {% endif %}
     <p class='pdate'> {{post.date}} </p>
     <p class='plikes' id="Likes{{post.id}}" > Likes = {{post.likes}} </p>
-    <button onclick="Add({{post.id}}, {{post.likes}})" id="Lpost{{post.id}}" type="button" class="btn btn-success">Like Post</button>
+    <button onclick="Add({{post.id}}, {{post.likes}})" id="Lpost{{post.id}}" type="button" class="btn btn-outline-success">Like Post</button>
 
 
 </div>
@@ -126,6 +126,7 @@
     <input type="hidden" id="selectedPost" name="selectedPost">
     <input type = "hidden" id="likeProcess2" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
+    <input type='hidden' id='reportedPost' name='reportedPost'>
 
 
     {% for objs in repliedPosts %}
@@ -169,7 +170,7 @@
                 {% endif %}
                 <p class='pdate'> {{objs.date}} </p>
                 <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
-                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+                <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-outline-success">Like Post</button>
             
                 
             </button>
@@ -184,7 +185,8 @@
             objID = "{{objs.id}}";
             if (likedList.includes(objID)) {
                 document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
-                console.log("yuh");
+                document.getElementById('Lpost{{objs.id}}').classList.remove('btn-outline-success');
+                document.getElementById('Lpost{{objs.id}}').classList.add('btn-success');
             }
 
         </script>
@@ -203,7 +205,8 @@
     objID = "{{post.id}}";
     if (likedList.includes("{{post.id}}")) {
         document.getElementById("Lpost{{post.id}}").innerHTML = "Unlike Post";
-        console.log("yuh");
+        document.getElementById('Lpost{{post.id}}').classList.remove('btn-outline-success');
+        document.getElementById('Lpost{{post.id}}').classList.add('btn-success');
     }
 
 </script>
@@ -216,9 +219,11 @@
 
     function Add(id, likes)
     {
-        console.log("Hello");
         if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
             document.getElementById("Lpost"+id).innerHTML = "Like Post";
+            document.getElementById('Lpost'+id).classList.remove('btn-success');
+            document.getElementById('Lpost'+id).classList.add('btn-outline-success');
+
             unlikeSession.push(id);
             document.getElementById('unlikeProcess').value = unlikeSession.join("-");
             document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
@@ -231,6 +236,9 @@
         }
         else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
             document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
+            document.getElementById('Lpost'+id).classList.remove('btn-outline-success');
+            document.getElementById('Lpost'+id).classList.add('btn-success');
+
             likeSession.push(id);
             document.getElementById('likeProcess').value = likeSession.join("-");
             document.getElementById('likeProcess2').value = likeSession.join("-");

@@ -133,6 +133,7 @@
         <input type="hidden" id="selectedPost" name="selectedPost">
         <input type = "hidden" id="likeProcess2" name='likeProcess'>
         <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
+        <input type='hidden' id='reportedPost' name='reportedPost'>
 
 
         {% for objs in otherUsersPosts %}
@@ -168,44 +169,40 @@
     
                 <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}" class="btn btn-success">Like Post</button>
 
-                <form method="post" action="afterPostReport">
-
-                    {% csrf_token %}
+                
             
-                    <input type='hidden' id='reportedPost' name='reportedPost' value='{{objs.id}}'>
-            
-                    <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
-                        Report Post
-                    </button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+                    Report Post
+                </button>
+                </div>
+        
+                
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title"> Reason for report </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-            
+                
+                    <!-- Modal body -->
                     
-                    <!-- The Modal -->
-                    <div class="modal" id="myModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                    
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title"> Reason for report </h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                    
-                        <!-- Modal body -->
-                        
-                        <textarea placeholder="enter reason" class="modal-body" name="reportReason"></textarea>
-                    
-                    
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
-                        </div>
-                    
-                        </div>
+                    <textarea placeholder="enter reason" class="modal-body" name="reportReason"></textarea>
+                
+                
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
                     </div>
+                
                     </div>
+                </div>
+                </div>
             
-                </form>
+                
     
                
     
