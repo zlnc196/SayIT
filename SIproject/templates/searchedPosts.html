@@ -30,13 +30,14 @@
 
 
 
-<form method="post" action="replies">
+<form method="post" action="replies" id="mainForm">
 
     {% csrf_token %}
 
     <input type="hidden" id="selectedPost" name="selectedPost">
     <input type = "hidden" id="likeProcess2" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
+    <input type='hidden' id='reportedPost' name='reportedPost'>
 
 
     {% for objs in selectedPosts %}
@@ -80,9 +81,50 @@
                 <p class='pdate'> {{objs.date}} </p>
                 <p class='plikes' id="Likes{{objs.id}}" > Likes = {{objs.likes}} </p>
                 <button type="button" onclick="Add({{objs.id}}, {{objs.likes}})" id="Lpost{{objs.id}}">Like Post</button>
+
+                <form method="post" action="afterPostReport">
+
+                    {% csrf_token %}
+            
+                    
+            
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Report Post
+                    </button>
+                    </div>
+            
+                    
+                    <!-- The Modal -->
+                    <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                    
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"> Reason for report </h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                    
+                        <!-- Modal body -->
+                        
+                        <textarea placeholder="enter reason" class="modal-body" name="reportReason"></textarea>
+                    
+                    
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
+                        </div>
+                    
+                        </div>
+                    </div>
+                    </div>
+            
+                </form>
             
                 
             </button>
+
+          
 
         </div> 
 
@@ -105,6 +147,12 @@
 
     {% endfor %}
 </form>
+
+
+   
+
+
+        
 
 
 
@@ -133,7 +181,7 @@
             document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
             likeSession.push(id);
             document.getElementById('likeProcess').value = likeSession.join("-");
-            document.getElementById('likeProcess2').value = unlikeSession.join("-");
+            document.getElementById('likeProcess2').value = likeSession.join("-");
             if (unlikeSession.includes(id)) {
                 unlikeSession.splice(unlikeSession.indexOf(id), 1);
             }
@@ -156,6 +204,11 @@
 <script>
     function getPost(x) {
         document.getElementById("selectedPost").value = x
+    }
+
+    function getPostR(x) {
+        document.getElementById("reportedPost").value = x
+        document.getElementById("mainForm").action = "afterPostReport";
     }
 
 

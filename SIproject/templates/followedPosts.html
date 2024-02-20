@@ -30,13 +30,14 @@
 
 
 
-<form method="post" action="replies">
+<form method="post" action="replies" id="mainForm">
 
     {% csrf_token %}
 
     <input type="hidden" id="selectedPost" name="selectedPost">
     <input type = "hidden" id="likeProcess2" name='likeProcess'>
     <input type = "hidden" id="unlikeProcess2" name='unlikeProcess'>
+    <input type='hidden' id='reportedPost' name='reportedPost'>
 
 
     {% for objs in followedPosts %}
@@ -58,7 +59,6 @@
                     <h3 class='pname'>{{objs.user.username}} </h3>
 
                 </div>
-
 
                 {% if objs.replyTo != "False" %}
                 {% for elem in allPosts %}
@@ -86,7 +86,7 @@
 
                     {% csrf_token %}
             
-                    <input type='hidden' id='reportedPost' name='reportedPost' value='{{objs.id}}'>
+                    
             
                     <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">
                         Report Post
@@ -112,7 +112,7 @@
                     
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Submit</button>
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" onclick="getPostR({{objs.id}})">Submit</button>
                         </div>
                     
                         </div>
@@ -123,6 +123,8 @@
             
                 
             </button>
+
+          
 
         </div> 
 
@@ -145,6 +147,12 @@
 
     {% endfor %}
 </form>
+
+
+   
+
+
+        
 
 
 
@@ -179,10 +187,6 @@
             }
             document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
         }
-
-        console.log(likeSession.join("-"))
-
-        console.log(unlikeSession.join("-"))
         
         
         
@@ -200,6 +204,11 @@
 <script>
     function getPost(x) {
         document.getElementById("selectedPost").value = x
+    }
+
+    function getPostR(x) {
+        document.getElementById("reportedPost").value = x
+        document.getElementById("mainForm").action = "afterPostReport";
     }
 
 
