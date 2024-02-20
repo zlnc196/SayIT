@@ -116,7 +116,6 @@ def homepage(request):
                         idholder.liked_posts.append(elem)
                         lidholder = Posts.objects.get(id = int(elem))
                         lidholder.likes = lidholder.likes+1
-                        print(elem, "has been added")
                         idholder.save()
                         lidholder.save()
                     
@@ -138,9 +137,7 @@ def homepage(request):
                         idholder.save()
                         lidholder.save()
                     
-            for elem in idholder.liked_posts:
-                print(elem)
-            
+           
         except:
             pass
         route = 'homepage.html' 
@@ -209,7 +206,6 @@ def profile(request):
         
         if replyCheck == "True":
             repliedTo = request.POST["repliedTo"]
-            print(repliedTo)
             postRepliedTo = Posts.objects.get(id=repliedTo)
             postRepliedTo.replies.append(newPost.id)
             postRepliedTo.save()
@@ -382,7 +378,6 @@ def search(request):
     searchedFor = request.POST['searchedFor']
     returnDict = {}
     cusers = request.user
-    print(UorP)
     if UorP == 'post':
         selectedPosts = Posts.objects.filter(post__icontains = searchedFor)
         route = 'searchedPosts.html'
@@ -432,8 +427,6 @@ def followChange(request):
     likedList = "-".join(likedList)
     currentUser = request.user
     followList = currentUser.followedUsers
-    print(otherUser.id)
-    print(followList)
     if otherUserId in followList:
         currentUser.followedUsers.remove(otherUserId)
         otherUser.followers -= 1
@@ -667,7 +660,7 @@ def blockUser(request):
     return render(request, "otherProfile.html", {'otherUser': otherUser, 'otherUsersPosts':otherUsersPosts, 'likedList':likedList,"blocked":blocked, "followed":followed, "currentUser": currentUser, "allUsers": allUsers})
     
 
-
+@login_required(login_url='login')
 def afterReport(request):
     reason = request.POST["reportReason"]
     currentUser = request.user
@@ -678,10 +671,9 @@ def afterReport(request):
     
     return render(request, "afterReport.html")
 
-
+@login_required(login_url='login')
 def afterPostReport(request):
     reason = request.POST["reportReason"]
-    currentUser = request.user
     reportedPostID = request.POST['reportedPost']
     reportedPost = Posts.objects.get(id=reportedPostID)
     reportedPost.postReports.append(reason)
