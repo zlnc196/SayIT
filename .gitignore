@@ -4,6 +4,8 @@ SIproject/SIproject/settings.py
 
 SIproject/SIapp/migrations/
 
+SIproject/media/media/
+
 SIproject/media/
 
 SIproject/SIproject/__pycache__/
