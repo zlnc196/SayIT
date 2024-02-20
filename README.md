@@ -1,0 +1,1 @@
+SayIt is a social media app which consists of common web software principles such as implementation of HTTPS protocols and security, implemented to showcase my ability as a competent back end engineer.
