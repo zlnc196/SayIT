@@ -38,13 +38,39 @@ def confirm(request):
     for char in password:
         if char in nums and len(password) >= 8:
             valid = True
+            break
+            
+    allUsers = get_user_model().objects.all()
+    errorMessage = "Number in password is required"
+    if valid == True:
+        for user in allUsers:
+            if user.username == username:
+                valid = False
+                errorMessage = "Username taken"
+                break
+        
+        for user in allUsers:
+            if user.email == email:
+                valid = False
+                errorMessage = "email taken"
+                break
+            
+        rulesCheck = "off"
+        if "checkbox" in request.POST:
+            rulesCheck = request.POST["checkbox"]
+       
+        if rulesCheck == "off":
+            valid = False
+            errorMessage = "Please confirm that you will adhere to the terms of service"
+            
+    
      
     if valid == True:
         user = get_user_model().objects.create_user(username=username, email=email, password=password, is_superuser=False, profilePicture='media\pfp.png',last_login = '2022-01-19 14:30:45.123456-05:00', is_active = True, date_joined = timezone.now() ,first_name = 'Dont', last_name = 'Worry', liked_posts=[], followedUsers = [], blockList=[], userReports=[]) #blockList=[], userReportedList=[] )
         user.save()
         return redirect("login")
 
-    return render(request, 'register.html', {'Valid': valid})
+    return render(request, 'register.html', {'Valid': valid, "errorMessage": errorMessage})
 
 @csrf_protect
 def homepage(request):

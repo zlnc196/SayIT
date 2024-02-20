@@ -4,7 +4,7 @@
 
 <div class ='registration'>
     {% if Valid == False %}
-        <p class='failure'> Registration Failed, Error in registration details </p>
+        <p class='failure'> {{errorMessage}} </p>
     {% endif %}
 <form method='post' action='confirm'>
     {% csrf_token %}
