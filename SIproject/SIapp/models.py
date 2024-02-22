@@ -20,7 +20,7 @@ class CustomUser(AbstractUser):
     user_permissions = None
     
 class Posts(models.Model):
-    post = models.CharField(max_length=200)
+    post = models.CharField(max_length=500)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     date = models.CharField(max_length=50, default='26/12/25')
     likes = models.IntegerField(default=0)

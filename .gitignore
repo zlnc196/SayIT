@@ -11,3 +11,9 @@ SIproject/media/
 SIproject/SIproject/__pycache__/
 
 SIproject/SIapp/__pycache__/
+
+NewsBot/dbPassword.txt
+
+NewsBot/dbName.txt
+
+NewsBot/key.txt
