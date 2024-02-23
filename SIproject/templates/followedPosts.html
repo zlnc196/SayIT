@@ -9,6 +9,10 @@
 <h1> Posts from followed Users </h1>
 </div>
 
+<script>
+    let likedList = "{{likedList}}".split('-');
+</script>
+
 <form method='post' action='homepage'>
 
     {% csrf_token %}
@@ -18,15 +22,6 @@
     <input type = "hidden" id="unlikeProcess" name='unlikeProcess'>
 
 </form>
-
-<script> 
-    const likeSession = [];
-    const unlikeSession = [];
-    let likedList = "{{likedList}}".split('-');
-    let objID;
-    let likes;
-
-</script>
 
 
 
@@ -125,14 +120,8 @@
         <br>
         
         <script>
-
             objID = "{{objs.id}}";
-            if (likedList.includes(objID)) {
-                document.getElementById("Lpost{{objs.id}}").innerHTML = "Unlike Post";
-                document.getElementById('Lpost{{objs.id}}').classList.remove('btn-outline-success');
-                document.getElementById('Lpost{{objs.id}}').classList.add('btn-success');
-            }
-
+            ifAlreadyLiked(objID)
         </script>
 
         
@@ -142,74 +131,6 @@
     {% endfor %}
 </form>
 
-
-   
-
-
-        
-
-
-
-
-<script>
-
-    
-    
-
-    function Add(id, likes)
-    {
-        if (document.getElementById("Lpost"+id).innerHTML == "Unlike Post") {
-            document.getElementById("Lpost"+id).innerHTML = "Like Post";
-            document.getElementById('Lpost'+id).classList.remove('btn-success');
-            document.getElementById('Lpost'+id).classList.add('btn-outline-success');
-            unlikeSession.push(id);
-            document.getElementById('unlikeProcess').value = unlikeSession.join("-");
-            document.getElementById('unlikeProcess2').value = unlikeSession.join("-");
-            if (likeSession.includes(id)) {
-                likeSession.splice(unlikeSession.indexOf(id), 1);
-            }
-            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))-1).toString();
-
-
-        }
-        else if (document.getElementById("Lpost"+id).innerHTML == "Like Post") {
-            document.getElementById("Lpost"+id).innerHTML = "Unlike Post";
-            document.getElementById('Lpost'+id).classList.remove('btn-outline-success');
-            document.getElementById('Lpost'+id).classList.add('btn-success');
-            likeSession.push(id);
-            document.getElementById('likeProcess').value = likeSession.join("-");
-            document.getElementById('likeProcess2').value = likeSession.join("-");
-            if (unlikeSession.includes(id)) {
-                unlikeSession.splice(unlikeSession.indexOf(id), 1);
-            }
-            document.getElementById("Likes"+id).innerHTML = "Likes = " + (parseInt(document.getElementById("Likes"+id).innerHTML.match(/\d+(\.\d+)?/g))+1).toString();;
-        }
-        
-        
-        
-    }
-    
-
-</script>
-
-
-
-
-
-
-
-<script>
-    function getPost(x) {
-        document.getElementById("selectedPost").value = x
-    }
-
-    function getPostR(x) {
-        document.getElementById("reportedPost").value = x
-        document.getElementById("mainForm").action = "afterPostReport";
-    }
-
-
-</script>
 
 
 {% endblock %}

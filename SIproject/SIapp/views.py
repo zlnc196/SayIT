@@ -41,6 +41,7 @@ def convertToList(string, array):
 
 def handleLikes(request):
     if "likeProcess" in request.POST and "unlikeProcess" in request.POST:
+        
         likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
         unlikeProcess = request.POST["unlikeProcess"] 
         likeArray = []
@@ -188,6 +189,8 @@ def homepage(request):
  
 @login_required(login_url='login')
 def profile(request):
+    print("Now on profile")
+    handleLikes(request)
     currentUser = request.user
     currentUsername = request.user.username
     etimeOfPost = datetime.datetime.now()

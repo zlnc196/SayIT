@@ -79,36 +79,7 @@
     <input type="hidden" name="replyCheck" value="False">
 </form>
 
-<script>
 
-    console.log("hello world")
-
-    
-    function updateSearchButtons() {
-        currentSearch = document.querySelector(".searcher").value;
-        document.getElementById("searchPost").innerHTML = `search for '${currentSearch}' in Posts'`;
-        document.getElementById("searchUser").innerHTML = `search for '${currentSearch}' in Users'`;
-        document.getElementById('searchPost').classList.remove('d-none');
-        document.getElementById('searchUser').classList.remove('d-none');
-
-        if (currentSearch.length == 0) {
-            document.getElementById('searchPost').classList.add('d-none');
-            document.getElementById('searchUser').classList.add('d-none');
-
-        }
-
-    }
-
-    function postOrUser(x) {
-        document.getElementById('userOrPost').value = x;
-        console.log("pls be fixed")
-        console.log(document.getElementById('userOrPost').value);
-
-    }
-    
-    
-
-</script>
 
     
 
