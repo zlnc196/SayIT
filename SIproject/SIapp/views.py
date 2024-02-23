@@ -25,6 +25,18 @@ def CanBeInt(testing):
         return True
     except ValueError:
         return False
+    
+def convertToList(string, array):
+    word=""
+    for char in string:                               #Quick algorithm to convert it back into a list
+            
+        if char == "-":
+            array.append(word)
+            word=""
+        else:
+            word=word+char
+    array.append(word)
+    return list(dict.fromkeys(array))
 
 
 def handleLikes(request):
@@ -33,27 +45,11 @@ def handleLikes(request):
         unlikeProcess = request.POST["unlikeProcess"] 
         likeArray = []
         unlikeArray = []
-        word=""
-        for char in likeProcess:                               #Quick algorithm to convert it back into a list
-            
-            if char == "-":
-                likeArray.append(word)
-                word=""
-            else:
-                word=word+char
-        likeArray.append(word)
-        likeArray = list(dict.fromkeys(likeArray))
+       
         
-        unword=""
-        for char in unlikeProcess:                               #Quick algorithm to convert it back into a list
-            
-            if char == "-":
-                unlikeArray.append(unword)
-                unword=""
-            else:
-                unword=unword+char
-        unlikeArray.append(unword)
-        unlikeArray = list(dict.fromkeys(unlikeArray))
+        likeArray = convertToList(likeProcess, likeArray)
+        
+        unlikeArray = convertToList(unlikeProcess, unlikeArray)
         
         for elem in likeArray:
             idholder = request.user
