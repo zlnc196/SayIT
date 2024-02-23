@@ -7,15 +7,28 @@ from django.views.decorators.csrf import csrf_protect
 from django.db.models import F, ExpressionWrapper, fields
 from django.db.models.functions import Now, Extract
 from django.utils import timezone
+import os
 
 
 
 
 # Create your views here.
 
+#Things to render Now to use later
+
+#I made the decision to handle likes client side leading to a better user experience
+# Therefore I need to handle the accumulation of all the likes does in a given page
+
+def CanBeInt(testing):
+    try:
+        holder = int(testing)
+        return True
+    except ValueError:
+        return False
+
 
 def handleLikes(request):
-    try:
+    if "likeProcess" in request.POST and "unlikeProcess" in request.POST:
         likeProcess = request.POST["likeProcess"]  #access the array turned int a string from the js file
         unlikeProcess = request.POST["unlikeProcess"] 
         likeArray = []
@@ -44,11 +57,7 @@ def handleLikes(request):
         
         for elem in likeArray:
             idholder = request.user
-            try:
-                testHolder = int(elem)
-                canAdd = True
-            except:
-                canAdd = False
+            canAdd = CanBeInt(elem)
             
             if canAdd == True:
                 if elem not in idholder.liked_posts:
@@ -60,11 +69,7 @@ def handleLikes(request):
                 
         for elem in unlikeArray:
             idholder = request.user
-            try:
-                testHolder = int(elem)
-                canRemove = True
-            except:
-                canRemove = False
+            canRemove = CanBeInt(elem)
                 
             if canRemove == True:
                 if elem in idholder.liked_posts:
@@ -73,10 +78,17 @@ def handleLikes(request):
                     lidholder.likes = lidholder.likes-1
                     idholder.save()
                     lidholder.save()   
-    except:
-        pass
+   
+    
+    
+with open(r"C:\Users\User\SayIt social media\badwords.txt", "r") as file:  #Prevention of hate speech is very important and vert relevant
+    badWords = file.read()
+   
+    
+badWordList = badWords.split(",")
 
-def intro(request):
+
+def intro(request): #Ensure security as Users cannot enter site logged in
     logout(request)
     return render(request, 'intro.html')
 
@@ -142,7 +154,7 @@ def homepage(request):
     loginValid=False
     
     if not request.user.is_authenticated:
-        try:
+        if "lusername" in request.POST and "lpassword" in request.POST:
             username = request.POST['lusername']
             password = request.POST['lpassword']
         
@@ -156,9 +168,8 @@ def homepage(request):
             else:
                 loginValid = False
                 route = 'login.html'
-                currentUsername = None
-                
-        except:
+                currentUsername = None       
+        else:
             route = 'login.html'
         
     else:
@@ -185,32 +196,30 @@ def profile(request):
     currentUsername = request.user.username
     etimeOfPost = datetime.datetime.now()
     timeOfPost = etimeOfPost.strftime('%c')
-    try:
+    if 'post' in request.POST:
         post = request.POST['post']
         postValid = True
-    except:
+    else:
         post=""
         postValid = False
         
-    try:
+    if 'image' in request.FILES:
         image = request.FILES['image']
-        
         imageValid = True
-        
-    except:
+    else:
         imageValid = False
         
     
     if post == "":
         postValid = False
         
-    try:
+    if 'replyCheck' in request.POST :
         replyCheck = request.POST["replyCheck"]    
-    except:
+    else:
         replyCheck = "False"
-    bannedWords = ['nigger', 'faggot', 'hitler', 'nazi', 'nigga', 'beaner', 'coon', 'ching', 'chong', 'kike']
+   
     for word in post.split():
-        if word.lower() in bannedWords:
+        if word.lower() in badWordList:
             post = 'Invalid due to hate speech'
     if postValid == True or imageValid:   
         if imageValid:  
@@ -236,9 +245,9 @@ def profile(request):
             postRepliedTo.replies.append(newPost.id)
             postRepliedTo.save()
             
-    try:      
+    if 'delpost' in request.POST:      
         delpost = request.POST["delpost"]
-    except:
+    else:
         delpost = "False"
     
     if delpost != "False":
@@ -327,9 +336,9 @@ def editProfile(request):
 @login_required(login_url='login')
 def changedProfile(request):
     newBio = request.POST['newBio']
-    try:
+    if 'newPfp' in request.POST:
         newPfp = request.FILES['newPfp']
-    except KeyError:
+    else:
         newPfp = request.user.profilePicture
     currentUser = request.user
     currentUser.bio = newBio
