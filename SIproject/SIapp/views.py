@@ -16,8 +16,7 @@ import os
 
 #Things to render Now to use later
 
-#I made the decision to handle likes client side leading to a better user experience
-# Therefore I need to handle the accumulation of all the likes does in a given page
+
 
 def CanBeInt(testing):
     try:
@@ -38,6 +37,9 @@ def convertToList(string, array):
     array.append(word)
     return list(dict.fromkeys(array))
 
+
+#I made the decision to handle likes client side leading to a better user experience
+# Therefore I need to handle the accumulation of all the likes does in a given page
 
 def handleLikes(request):
     if "likeProcess" in request.POST and "unlikeProcess" in request.POST:
@@ -92,7 +94,7 @@ def intro(request): #Ensure security as Users cannot enter site logged in
 def register(request):
     return render(request, 'register.html')
 
-@csrf_protect
+@csrf_protect #Decorator to protect from CSRF attacks when logging in
 def login(request):
     if request.user.is_authenticated:
         logout(request)
@@ -146,7 +148,6 @@ def confirm(request):
 
 @csrf_protect
 def homepage(request):
-    UserData = get_user_model().objects.all()
     idholder = 0
     loginValid=False
     
